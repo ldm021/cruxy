@@ -161,6 +161,46 @@ h1 {
     align-items: flex-start;
 }
 
+.grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.direction-indicator {
+    background: #f7fafc;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid #667eea;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95em;
+}
+
+.direction-indicator.active {
+    display: flex;
+}
+
+.direction-label {
+    color: #4a5568;
+    font-weight: 600;
+}
+
+.direction-text {
+    color: #667eea;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-transform: uppercase;
+}
+
+.direction-hint {
+    color: #718096;
+    font-size: 0.85em;
+    font-style: italic;
+}
+
 .grid-container {
     display: grid;
     gap: 0;
@@ -207,6 +247,14 @@ h1 {
 
 .grid-cell.incorrect {
     background: #fed7d7;
+}
+
+.grid-cell.highlighted {
+    background: #e3f2fd;
+}
+
+.grid-cell.highlighted input:focus {
+    background: #bbdefb;
 }
 
 .grid-cell .cell-number {

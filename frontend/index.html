@@ -33,8 +33,15 @@
 
         <div id="puzzleContainer" class="puzzle-container">
             <div class="grid-section">
-                <div id="gridContainer" class="grid-container">
-                    <!-- Grid will be generated here -->
+                <div class="grid-wrapper">
+                    <div id="directionIndicator" class="direction-indicator">
+                        <span class="direction-label">Direction:</span>
+                        <span id="directionText" class="direction-text">Across</span>
+                        <span class="direction-hint">(Click cell again or press Space to toggle)</span>
+                    </div>
+                    <div id="gridContainer" class="grid-container">
+                        <!-- Grid will be generated here -->
+                    </div>
                 </div>
             </div>
 

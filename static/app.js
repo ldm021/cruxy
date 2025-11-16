@@ -5,6 +5,9 @@ class CrosswordApp {
         this.currentPuzzle = null;
         this.gridSize = 9;
         this.userGrid = [];
+        this.currentDirection = 'across'; // Track cursor direction
+        this.currentCell = null; // Track active cell {row, col}
+        this.wordMap = null; // Map cells to words
 
         // DOM elements
         this.generateBtn = document.getElementById('generateBtn');
@@ -15,6 +18,8 @@ class CrosswordApp {
         this.acrossClues = document.getElementById('acrossClues');
         this.downClues = document.getElementById('downClues');
         this.messageDiv = document.getElementById('message');
+        this.directionIndicator = document.getElementById('directionIndicator');
+        this.directionText = document.getElementById('directionText');
 
         this.initializeEventListeners();
     }
@@ -68,14 +73,57 @@ class CrosswordApp {
             .map(() => Array(this.currentPuzzle.size).fill(''));
     }
 
+    buildWordMap() {
+        // Build a map of cells to words that pass through them
+        this.wordMap = {};
+        const { clues } = this.currentPuzzle;
+
+        // Process across words
+        clues.across.forEach(clue => {
+            const { row, col, length } = clue;
+            for (let i = 0; i < length; i++) {
+                const key = `${row}-${col + i}`;
+                if (!this.wordMap[key]) {
+                    this.wordMap[key] = { across: null, down: null };
+                }
+                this.wordMap[key].across = clue;
+            }
+        });
+
+        // Process down words
+        clues.down.forEach(clue => {
+            const { row, col, length } = clue;
+            for (let i = 0; i < length; i++) {
+                const key = `${row + i}-${col}`;
+                if (!this.wordMap[key]) {
+                    this.wordMap[key] = { across: null, down: null };
+                }
+                this.wordMap[key].down = clue;
+            }
+        });
+    }
+
     renderPuzzle() {
         if (!this.currentPuzzle) return;
+
+        // Build word map for directional navigation
+        this.buildWordMap();
 
         // Render grid
         this.renderGrid();
 
         // Render clues
         this.renderClues();
+
+        // Show direction indicator
+        this.directionIndicator.classList.add('active');
+        this.updateDirectionDisplay();
+    }
+
+    updateDirectionDisplay() {
+        if (this.directionText) {
+            this.directionText.textContent = this.currentDirection === 'across' ? 'Across' : 'Down';
+        }
     }
 
     renderGrid() {
@@ -127,11 +175,64 @@ class CrosswordApp {
         // Event listeners for navigation
         input.addEventListener('input', (e) => this.handleInput(e, row, col));
         input.addEventListener('keydown', (e) => this.handleKeydown(e, row, col));
-        input.addEventListener('focus', () => this.highlightRelatedCells(row, col));
+        input.addEventListener('focus', (e) => this.handleFocus(e, row, col));
         input.addEventListener('blur', () => this.clearHighlights());
+        input.addEventListener('click', (e) => this.handleCellClick(e, row, col));
 
         cell.appendChild(input);
         return cell;
+    }
+
+    handleCellClick(event, row, col) {
+        // If clicking the same cell, toggle direction
+        if (this.currentCell && this.currentCell.row === row && this.currentCell.col === col) {
+            this.toggleDirection(row, col);
+        } else {
+            // New cell - determine best direction
+            this.setDirectionForCell(row, col);
+        }
+    }
+
+    handleFocus(event, row, col) {
+        this.currentCell = { row, col };
+        this.highlightCurrentWord(row, col);
+    }
+
+    setDirectionForCell(row, col) {
+        const key = `${row}-${col}`;
+        const words = this.wordMap[key];
+
+        if (!words) return;
+
+        // If only one direction available, use it
+        if (words.across && !words.down) {
+            this.currentDirection = 'across';
+        } else if (words.down && !words.across) {
+            this.currentDirection = 'down';
+        }
+        // Otherwise keep current direction if valid, or default to across
+        else if (words.across && words.down) {
+            if (!words[this.currentDirection]) {
+                this.currentDirection = 'across';
+            }
+        }
+
+        this.updateDirectionDisplay();
+        this.highlightCurrentWord(row, col);
+    }
+
+    toggleDirection(row, col) {
+        const key = `${row}-${col}`;
+        const words = this.wordMap[key];
+
+        if (!words) return;
+
+        // Toggle between across and down if both are available
+        if (words.across && words.down) {
+            this.currentDirection = this.currentDirection === 'across' ? 'down' : 'across';
+            this.updateDirectionDisplay();
+            this.highlightCurrentWord(row, col);
+        }
     }
 
     handleInput(event, row, col) {
@@ -145,14 +246,21 @@ class CrosswordApp {
         // Update user grid
         this.userGrid[row][col] = value;
 
-        // Auto-advance to next cell
+        // Auto-advance to next cell in current direction
         if (value) {
-            this.moveToNextCell(row, col);
+            this.moveInDirection(row, col, this.currentDirection);
         }
     }
 
     handleKeydown(event, row, col) {
         const key = event.key;
+
+        // Spacebar toggles direction
+        if (key === ' ') {
+            event.preventDefault();
+            this.toggleDirection(row, col);
+            return;
+        }
 
         // Handle arrow keys
         if (key === 'ArrowRight') {
@@ -169,7 +277,7 @@ class CrosswordApp {
             this.moveFocus(row, col, -1, 0);
         } else if (key === 'Backspace' && !event.target.value) {
             event.preventDefault();
-            this.moveToPreviousCell(row, col);
+            this.moveInDirection(row, col, this.currentDirection, true); // Move backward
         }
     }
 
@@ -195,23 +303,80 @@ class CrosswordApp {
         }
     }
 
-    moveToNextCell(row, col) {
-        // Try to move right first, then down
-        this.moveFocus(row, col, 0, 1);
+    moveInDirection(row, col, direction, backward = false) {
+        const key = `${row}-${col}`;
+        const words = this.wordMap[key];
+        if (!words || !words[direction]) return;
+
+        const word = words[direction];
+        const { row: wordRow, col: wordCol, length } = word;
+
+        let nextRow, nextCol;
+
+        if (direction === 'across') {
+            const currentIndex = col - wordCol;
+            const nextIndex = backward ? currentIndex - 1 : currentIndex + 1;
+
+            if (nextIndex >= 0 && nextIndex < length) {
+                nextRow = row;
+                nextCol = wordCol + nextIndex;
+            }
+        } else { // down
+            const currentIndex = row - wordRow;
+            const nextIndex = backward ? currentIndex - 1 : currentIndex + 1;
+
+            if (nextIndex >= 0 && nextIndex < length) {
+                nextRow = wordRow + nextIndex;
+                nextCol = col;
+            }
+        }
+
+        if (nextRow !== undefined && nextCol !== undefined) {
+            const input = this.gridContainer.querySelector(
+                `input[data-row="${nextRow}"][data-col="${nextCol}"]`
+            );
+            if (input) {
+                input.focus();
+                input.select();
+            }
+        }
     }
 
-    moveToPreviousCell(row, col) {
-        // Try to move left first, then up
-        this.moveFocus(row, col, 0, -1);
-    }
+    highlightCurrentWord(row, col) {
+        // Clear previous highlights
+        this.clearHighlights();
 
-    highlightRelatedCells(row, col) {
-        // Could be enhanced to highlight cells in the same word
-        // For now, just basic functionality
+        const key = `${row}-${col}`;
+        const words = this.wordMap[key];
+        if (!words || !words[this.currentDirection]) return;
+
+        const word = words[this.currentDirection];
+        const { row: wordRow, col: wordCol, length } = word;
+
+        // Highlight all cells in the current word
+        for (let i = 0; i < length; i++) {
+            let cellRow, cellCol;
+
+            if (this.currentDirection === 'across') {
+                cellRow = wordRow;
+                cellCol = wordCol + i;
+            } else {
+                cellRow = wordRow + i;
+                cellCol = wordCol;
+            }
+
+            const cell = this.gridContainer.querySelector(
+                `.grid-cell[data-row="${cellRow}"][data-col="${cellCol}"]`
+            );
+            if (cell && !cell.classList.contains('blocked')) {
+                cell.classList.add('highlighted');
+            }
+        }
     }
 
     clearHighlights() {
-        // Clear any highlights
+        const highlighted = this.gridContainer.querySelectorAll('.highlighted');
+        highlighted.forEach(cell => cell.classList.remove('highlighted'));
     }
 
     renderClues() {
