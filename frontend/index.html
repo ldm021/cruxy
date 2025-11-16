@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossword Puzzle Generator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Crossword Puzzle Generator</h1>
+            <p class="subtitle">Generate and solve crossword puzzles</p>
+        </header>
+
+        <div class="controls">
+            <button id="generateBtn" class="btn btn-primary">Generate New Puzzle</button>
+            <button id="checkBtn" class="btn btn-secondary" disabled>Check Answers</button>
+            <button id="revealBtn" class="btn btn-secondary" disabled>Reveal Solution</button>
+
+            <div class="grid-size-control">
+                <label for="gridSize">Grid Size:</label>
+                <select id="gridSize">
+                    <option value="7">7x7</option>
+                    <option value="9" selected>9x9</option>
+                    <option value="11">11x11</option>
+                    <option value="13">13x13</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <div id="puzzleContainer" class="puzzle-container">
+            <div class="grid-section">
+                <div id="gridContainer" class="grid-container">
+                    <!-- Grid will be generated here -->
+                </div>
+            </div>
+
+            <div class="clues-section">
+                <div class="clues-column">
+                    <h2>Across</h2>
+                    <div id="acrossClues" class="clues-list">
+                        <!-- Across clues will be generated here -->
+                    </div>
+                </div>
+
+                <div class="clues-column">
+                    <h2>Down</h2>
+                    <div id="downClues" class="clues-list">
+                        <!-- Down clues will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

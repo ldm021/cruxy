@@ -1,0 +1,321 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #667eea;
+}
+
+h1 {
+    color: #333;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.1em;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #48bb78;
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #38a169;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+}
+
+#revealBtn {
+    background: #ed8936;
+}
+
+#revealBtn:hover:not(:disabled) {
+    background: #dd6b20;
+    box-shadow: 0 5px 15px rgba(237, 137, 54, 0.4);
+}
+
+.grid-size-control {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.grid-size-control label {
+    font-weight: 600;
+    color: #333;
+}
+
+.grid-size-control select {
+    padding: 8px 12px;
+    border: 2px solid #667eea;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    background: white;
+}
+
+/* Message */
+.message {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: none;
+    font-weight: 600;
+}
+
+.message.success {
+    display: block;
+    background: #c6f6d5;
+    color: #22543d;
+    border: 2px solid #48bb78;
+}
+
+.message.error {
+    display: block;
+    background: #fed7d7;
+    color: #742a2a;
+    border: 2px solid #f56565;
+}
+
+.message.info {
+    display: block;
+    background: #bee3f8;
+    color: #2c5282;
+    border: 2px solid #4299e1;
+}
+
+/* Puzzle Container */
+.puzzle-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+/* Grid Section */
+.grid-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.grid-container {
+    display: grid;
+    gap: 0;
+    border: 2px solid #333;
+    background: #333;
+    width: fit-content;
+}
+
+.grid-cell {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #333;
+    background: white;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid-cell.blocked {
+    background: #000;
+}
+
+.grid-cell input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: transparent;
+    outline: none;
+    padding: 0;
+}
+
+.grid-cell input:focus {
+    background: #fff9c4;
+}
+
+.grid-cell.correct {
+    background: #c6f6d5;
+}
+
+.grid-cell.incorrect {
+    background: #fed7d7;
+}
+
+.grid-cell .cell-number {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 0.6em;
+    font-weight: bold;
+    color: #333;
+    pointer-events: none;
+}
+
+/* Clues Section */
+.clues-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.clues-column h2 {
+    color: #667eea;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.clues-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.clue-item {
+    padding: 12px;
+    background: #f7fafc;
+    border-left: 4px solid #667eea;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.clue-item:hover {
+    background: #edf2f7;
+    transform: translateX(5px);
+}
+
+.clue-number {
+    font-weight: bold;
+    color: #667eea;
+    margin-right: 8px;
+}
+
+.clue-text {
+    color: #2d3748;
+}
+
+.clue-length {
+    color: #718096;
+    font-size: 0.9em;
+    margin-left: 8px;
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 1.2em;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .puzzle-container {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-section {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .grid-size-control {
+        margin-left: 0;
+    }
+
+    .clues-section {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-cell {
+        width: 35px;
+        height: 35px;
+    }
+
+    .grid-cell input {
+        font-size: 1em;
+    }
+}
