@@ -1,0 +1,9 @@
+{
+    "python.defaultInterpreterPath": "python3",
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true
+    },
+    "livePreview.defaultPreviewPath": "/frontend/index.html",
+    "simpleBrowser.focusLockIndicator.enabled": true
+}

@@ -32,11 +32,13 @@ instance/
 .venv
 
 # IDE
-.vscode/
 .idea/
 *.swp
 *.swo
 *~
+
+# VSCode settings are included for better developer experience
+# Remove .vscode/ from tracking if you want personal settings
 
 # OS
 .DS_Store
