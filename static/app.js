@@ -50,6 +50,41 @@ class CrosswordApp {
                 this.generatorMode = e.target.value;
             });
         });
+
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => this.toggleTheme());
+        }
+
+        // Load saved theme preference
+        this.loadThemePreference();
+    }
+
+    toggleTheme() {
+        const body = document.body;
+        const themeIcon = document.querySelector('.theme-icon');
+
+        body.classList.toggle('dark-mode');
+
+        // Update icon
+        if (body.classList.contains('dark-mode')) {
+            themeIcon.textContent = '☀️';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            themeIcon.textContent = '🌙';
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    loadThemePreference() {
+        const savedTheme = localStorage.getItem('theme');
+        const themeIcon = document.querySelector('.theme-icon');
+
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+        }
     }
 
     async generatePuzzle() {

@@ -1,3 +1,78 @@
+/* CSS Variables for Theme */
+:root {
+    /* Light Mode Colors */
+    --bg-gradient-start: #667eea;
+    --bg-gradient-end: #764ba2;
+    --container-bg: #ffffff;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-muted: #718096;
+    --border-color: #e2e8f0;
+    --border-accent: #667eea;
+    --input-bg: #ffffff;
+    --cell-bg: #ffffff;
+    --cell-blocked: #000000;
+    --cell-focus: #fff9c4;
+    --cell-highlighted: #e3f2fd;
+    --clue-bg: #f7fafc;
+    --clue-hover-bg: #edf2f7;
+    --button-primary: #667eea;
+    --button-primary-hover: #5568d3;
+    --button-secondary: #48bb78;
+    --button-secondary-hover: #38a169;
+    --button-reveal: #ed8936;
+    --button-reveal-hover: #dd6b20;
+    --message-success-bg: #c6f6d5;
+    --message-success-text: #22543d;
+    --message-success-border: #48bb78;
+    --message-error-bg: #fed7d7;
+    --message-error-text: #742a2a;
+    --message-error-border: #f56565;
+    --message-info-bg: #bee3f8;
+    --message-info-text: #2c5282;
+    --message-info-border: #4299e1;
+    --metrics-bg: #f7fafc;
+    --metrics-bg-end: #edf2f7;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode {
+    /* Dark Mode Colors */
+    --bg-gradient-start: #1a202c;
+    --bg-gradient-end: #2d3748;
+    --container-bg: #2d3748;
+    --text-primary: #e2e8f0;
+    --text-secondary: #cbd5e0;
+    --text-muted: #a0aec0;
+    --border-color: #4a5568;
+    --border-accent: #805ad5;
+    --input-bg: #4a5568;
+    --cell-bg: #4a5568;
+    --cell-blocked: #1a202c;
+    --cell-focus: #744210;
+    --cell-highlighted: #2c5282;
+    --clue-bg: #374151;
+    --clue-hover-bg: #4a5568;
+    --button-primary: #805ad5;
+    --button-primary-hover: #6b46c1;
+    --button-secondary: #38b2ac;
+    --button-secondary-hover: #319795;
+    --button-reveal: #ed8936;
+    --button-reveal-hover: #dd6b20;
+    --message-success-bg: #2f855a;
+    --message-success-text: #c6f6d5;
+    --message-success-border: #48bb78;
+    --message-error-bg: #c53030;
+    --message-error-text: #fed7d7;
+    --message-error-border: #f56565;
+    --message-info-bg: #2c5282;
+    --message-info-text: #bee3f8;
+    --message-info-border: #4299e1;
+    --metrics-bg: #374151;
+    --metrics-bg-end: #4a5568;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
 /* General Styles */
 * {
     margin: 0;
@@ -7,37 +82,80 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
     min-height: 100vh;
     padding: 20px;
+    transition: background 0.3s ease;
 }
 
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    background: white;
+    background: var(--container-bg);
     border-radius: 10px;
     padding: 30px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 40px var(--shadow-color);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Header */
 header {
-    text-align: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #667eea;
+    border-bottom: 2px solid var(--border-accent);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-text {
+    text-align: center;
+    flex: 1;
 }
 
 h1 {
-    color: #333;
+    color: var(--text-primary);
     font-size: 2.5em;
     margin-bottom: 10px;
+    transition: color 0.3s ease;
 }
 
 .subtitle {
-    color: #666;
+    color: var(--text-secondary);
     font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: var(--clue-bg);
+    border: 2px solid var(--border-accent);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1.5em;
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+    background: var(--border-accent);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-icon {
+    transition: transform 0.3s ease;
 }
 
 /* Controls */
@@ -65,33 +183,33 @@ h1 {
 }
 
 .btn-primary {
-    background: #667eea;
+    background: var(--button-primary);
     color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: #5568d3;
+    background: var(--button-primary-hover);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
 .btn-secondary {
-    background: #48bb78;
+    background: var(--button-secondary);
     color: white;
 }
 
 .btn-secondary:hover:not(:disabled) {
-    background: #38a169;
+    background: var(--button-secondary-hover);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
 }
 
 #revealBtn {
-    background: #ed8936;
+    background: var(--button-reveal);
 }
 
 #revealBtn:hover:not(:disabled) {
-    background: #dd6b20;
+    background: var(--button-reveal-hover);
     box-shadow: 0 5px 15px rgba(237, 137, 54, 0.4);
 }
 
@@ -104,16 +222,19 @@ h1 {
 
 .grid-size-control label {
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
 }
 
 .grid-size-control select {
     padding: 8px 12px;
-    border: 2px solid #667eea;
+    border: 2px solid var(--border-accent);
     border-radius: 5px;
     font-size: 1em;
     cursor: pointer;
-    background: white;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
 }
 
 .difficulty-control {
@@ -124,26 +245,28 @@ h1 {
 
 .difficulty-control label {
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
 }
 
 .difficulty-control select {
     padding: 8px 12px;
-    border: 2px solid #764ba2;
+    border: 2px solid var(--border-accent);
     border-radius: 5px;
     font-size: 1em;
     cursor: pointer;
-    background: white;
+    background: var(--input-bg);
+    color: var(--text-primary);
     transition: all 0.3s ease;
 }
 
 .difficulty-control select:hover {
-    border-color: #667eea;
+    border-color: var(--border-accent);
 }
 
 .difficulty-control select:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--border-accent);
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -158,23 +281,23 @@ h1 {
 
 .message.success {
     display: block;
-    background: #c6f6d5;
-    color: #22543d;
-    border: 2px solid #48bb78;
+    background: var(--message-success-bg);
+    color: var(--message-success-text);
+    border: 2px solid var(--message-success-border);
 }
 
 .message.error {
     display: block;
-    background: #fed7d7;
-    color: #742a2a;
-    border: 2px solid #f56565;
+    background: var(--message-error-bg);
+    color: var(--message-error-text);
+    border: 2px solid var(--message-error-border);
 }
 
 .message.info {
     display: block;
-    background: #bee3f8;
-    color: #2c5282;
-    border: 2px solid #4299e1;
+    background: var(--message-info-bg);
+    color: var(--message-info-text);
+    border: 2px solid var(--message-info-border);
 }
 
 /* Puzzle Container */
@@ -200,14 +323,15 @@ h1 {
 }
 
 .direction-indicator {
-    background: #f7fafc;
+    background: var(--clue-bg);
     padding: 10px 20px;
     border-radius: 8px;
-    border: 2px solid #667eea;
+    border: 2px solid var(--border-accent);
     display: none;
     align-items: center;
     gap: 10px;
     font-size: 0.95em;
+    transition: all 0.3s ease;
 }
 
 .direction-indicator.active {
@@ -215,44 +339,49 @@ h1 {
 }
 
 .direction-label {
-    color: #4a5568;
+    color: var(--text-muted);
     font-weight: 600;
+    transition: color 0.3s ease;
 }
 
 .direction-text {
-    color: #667eea;
+    color: var(--border-accent);
     font-weight: bold;
     font-size: 1.1em;
     text-transform: uppercase;
+    transition: color 0.3s ease;
 }
 
 .direction-hint {
-    color: #718096;
+    color: var(--text-muted);
     font-size: 0.85em;
     font-style: italic;
+    transition: color 0.3s ease;
 }
 
 .grid-container {
     display: grid;
     gap: 0;
-    border: 2px solid #333;
-    background: #333;
+    border: 2px solid var(--border-color);
+    background: var(--border-color);
     width: fit-content;
+    transition: all 0.3s ease;
 }
 
 .grid-cell {
     width: 40px;
     height: 40px;
-    border: 1px solid #333;
-    background: white;
+    border: 1px solid var(--border-color);
+    background: var(--cell-bg);
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
 }
 
 .grid-cell.blocked {
-    background: #000;
+    background: var(--cell-blocked);
 }
 
 .grid-cell input {
@@ -266,26 +395,29 @@ h1 {
     background: transparent;
     outline: none;
     padding: 0;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
 }
 
 .grid-cell input:focus {
-    background: #fff9c4;
+    background: var(--cell-focus);
 }
 
 .grid-cell.correct {
-    background: #c6f6d5;
+    background: var(--message-success-bg);
 }
 
 .grid-cell.incorrect {
-    background: #fed7d7;
+    background: var(--message-error-bg);
 }
 
 .grid-cell.highlighted {
-    background: #e3f2fd;
+    background: var(--cell-highlighted);
 }
 
 .grid-cell.highlighted input:focus {
-    background: #bbdefb;
+    background: var(--cell-highlighted);
+    filter: brightness(0.9);
 }
 
 .grid-cell .cell-number {
@@ -294,8 +426,9 @@ h1 {
     left: 2px;
     font-size: 0.6em;
     font-weight: bold;
-    color: #333;
+    color: var(--text-primary);
     pointer-events: none;
+    transition: color 0.3s ease;
 }
 
 /* Clues Section */
@@ -306,11 +439,12 @@ h1 {
 }
 
 .clues-column h2 {
-    color: #667eea;
+    color: var(--border-accent);
     font-size: 1.5em;
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #e2e8f0;
+    border-bottom: 2px solid var(--border-color);
+    transition: all 0.3s ease;
 }
 
 .clues-list {
@@ -321,31 +455,34 @@ h1 {
 
 .clue-item {
     padding: 12px;
-    background: #f7fafc;
-    border-left: 4px solid #667eea;
+    background: var(--clue-bg);
+    border-left: 4px solid var(--border-accent);
     border-radius: 4px;
     transition: all 0.2s ease;
 }
 
 .clue-item:hover {
-    background: #edf2f7;
+    background: var(--clue-hover-bg);
     transform: translateX(5px);
 }
 
 .clue-number {
     font-weight: bold;
-    color: #667eea;
+    color: var(--border-accent);
     margin-right: 8px;
+    transition: color 0.3s ease;
 }
 
 .clue-text {
-    color: #2d3748;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
 }
 
 .clue-length {
-    color: #718096;
+    color: var(--text-muted);
     font-size: 0.9em;
     margin-left: 8px;
+    transition: color 0.3s ease;
 }
 
 /* Generator Mode Control */
@@ -354,14 +491,16 @@ h1 {
     align-items: center;
     gap: 10px;
     padding: 10px 15px;
-    background: #f7fafc;
+    background: var(--clue-bg);
     border-radius: 8px;
-    border: 2px solid #667eea;
+    border: 2px solid var(--border-accent);
+    transition: all 0.3s ease;
 }
 
 .generator-mode-control label:first-child {
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
 }
 
 .mode-options {
@@ -375,7 +514,8 @@ h1 {
     gap: 5px;
     cursor: pointer;
     font-weight: 500;
-    color: #4a5568;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
 }
 
 .radio-label input[type="radio"] {
@@ -385,24 +525,26 @@ h1 {
 }
 
 .radio-label:hover {
-    color: #667eea;
+    color: var(--border-accent);
 }
 
 /* Metrics Container */
 .metrics-container {
-    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    background: linear-gradient(135deg, var(--metrics-bg) 0%, var(--metrics-bg-end) 100%);
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
-    border: 2px solid #667eea;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--border-accent);
+    box-shadow: 0 4px 6px var(--shadow-color);
+    transition: all 0.3s ease;
 }
 
 .metrics-container h3 {
-    color: #667eea;
+    color: var(--border-accent);
     margin-bottom: 15px;
     font-size: 1.3em;
     text-align: center;
+    transition: color 0.3s ease;
 }
 
 .metrics-grid {
@@ -412,10 +554,10 @@ h1 {
 }
 
 .metric-item {
-    background: white;
+    background: var(--container-bg);
     padding: 15px;
     border-radius: 8px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid var(--border-accent);
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -429,16 +571,18 @@ h1 {
 
 .metric-label {
     font-size: 0.85em;
-    color: #718096;
+    color: var(--text-muted);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    transition: color 0.3s ease;
 }
 
 .metric-value {
     font-size: 1.4em;
-    color: #2d3748;
+    color: var(--text-primary);
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 /* Loading State */
