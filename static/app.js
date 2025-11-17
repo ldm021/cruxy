@@ -263,12 +263,21 @@ class CrosswordApp {
             return;
         }
 
-        // Handle letter keys - auto-advance after input
+        // Handle letter keys - manually set value and auto-advance
         if (key.length === 1 && /[a-zA-Z]/.test(key)) {
-            // Let the browser handle the input normally, then advance
-            setTimeout(() => {
-                this.moveInDirection(row, col, this.currentDirection);
-            }, 0);
+            event.preventDefault(); // Prevent default to control behavior
+            const input = event.target;
+            const letter = key.toUpperCase();
+
+            console.log(`Letter key pressed: ${letter} at (${row}, ${col}), direction: ${this.currentDirection}`);
+
+            // Manually set the input value
+            input.value = letter;
+            this.userGrid[row][col] = letter;
+
+            // Immediately advance to next cell
+            console.log('Attempting to move in direction:', this.currentDirection);
+            this.moveInDirection(row, col, this.currentDirection);
             return;
         }
 
@@ -314,18 +323,26 @@ class CrosswordApp {
     }
 
     moveInDirection(row, col, direction, backward = false) {
+        console.log(`moveInDirection called: row=${row}, col=${col}, direction=${direction}, backward=${backward}`);
         const key = `${row}-${col}`;
         const words = this.wordMap[key];
-        if (!words || !words[direction]) return;
+        console.log('wordMap for this cell:', words);
+
+        if (!words || !words[direction]) {
+            console.log('No words found for this direction');
+            return;
+        }
 
         const word = words[direction];
         const { row: wordRow, col: wordCol, length } = word;
+        console.log(`Word info: row=${wordRow}, col=${wordCol}, length=${length}`);
 
         let nextRow, nextCol;
 
         if (direction === 'across') {
             const currentIndex = col - wordCol;
             const nextIndex = backward ? currentIndex - 1 : currentIndex + 1;
+            console.log(`Across: currentIndex=${currentIndex}, nextIndex=${nextIndex}`);
 
             if (nextIndex >= 0 && nextIndex < length) {
                 nextRow = row;
@@ -334,6 +351,7 @@ class CrosswordApp {
         } else { // down
             const currentIndex = row - wordRow;
             const nextIndex = backward ? currentIndex - 1 : currentIndex + 1;
+            console.log(`Down: currentIndex=${currentIndex}, nextIndex=${nextIndex}`);
 
             if (nextIndex >= 0 && nextIndex < length) {
                 nextRow = wordRow + nextIndex;
@@ -341,13 +359,17 @@ class CrosswordApp {
             }
         }
 
+        console.log(`Next cell: nextRow=${nextRow}, nextCol=${nextCol}`);
+
         if (nextRow !== undefined && nextCol !== undefined) {
             const input = this.gridContainer.querySelector(
                 `input[data-row="${nextRow}"][data-col="${nextCol}"]`
             );
+            console.log('Found input element:', input);
             if (input) {
                 input.focus();
                 input.select();
+                console.log('Focused and selected next input');
             }
         }
     }
