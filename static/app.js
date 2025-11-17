@@ -251,11 +251,6 @@ class CrosswordApp {
 
         // Update user grid
         this.userGrid[row][col] = value;
-
-        // Auto-advance to next cell in current direction
-        if (value) {
-            this.moveInDirection(row, col, this.currentDirection);
-        }
     }
 
     handleKeydown(event, row, col) {
@@ -265,6 +260,15 @@ class CrosswordApp {
         if (key === ' ') {
             event.preventDefault();
             this.toggleDirection(row, col);
+            return;
+        }
+
+        // Handle letter keys - auto-advance after input
+        if (key.length === 1 && /[a-zA-Z]/.test(key)) {
+            // Let the browser handle the input normally, then advance
+            setTimeout(() => {
+                this.moveInDirection(row, col, this.currentDirection);
+            }, 0);
             return;
         }
 
