@@ -40,6 +40,9 @@ instance/
 # VSCode settings are included for better developer experience
 # Remove .vscode/ from tracking if you want personal settings
 
+# Logs
+*.log
+
 # OS
 .DS_Store
 Thumbs.db
