@@ -84,9 +84,14 @@ class CrosswordApp {
         this.wordMap = {};
         const { clues } = this.currentPuzzle;
 
+        console.log('buildWordMap called');
+        console.log('Across clues:', clues.across);
+        console.log('Down clues:', clues.down);
+
         // Process across words
         clues.across.forEach(clue => {
             const { row, col, length } = clue;
+            console.log(`Processing across word at (${row}, ${col}), length ${length}`);
             for (let i = 0; i < length; i++) {
                 const key = `${row}-${col + i}`;
                 if (!this.wordMap[key]) {
@@ -99,6 +104,7 @@ class CrosswordApp {
         // Process down words
         clues.down.forEach(clue => {
             const { row, col, length } = clue;
+            console.log(`Processing down word at (${row}, ${col}), length ${length}`);
             for (let i = 0; i < length; i++) {
                 const key = `${row + i}-${col}`;
                 if (!this.wordMap[key]) {
@@ -107,6 +113,8 @@ class CrosswordApp {
                 this.wordMap[key].down = clue;
             }
         });
+
+        console.log('Final wordMap:', this.wordMap);
     }
 
     renderPuzzle() {
