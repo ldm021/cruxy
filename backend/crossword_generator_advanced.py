@@ -118,14 +118,15 @@ class AdvancedCrosswordGenerator:
         selected_words = [w[1] for w in scored_words[:num_to_select]]
 
         # Word count targets (realistic and achievable)
+        # Lowered to ensure higher success rates for larger grids
         if self.grid_size <= 9:
             target_min_words = 8  # 9x9: aim for 8-12 words (same as standard)
         elif self.grid_size <= 11:
-            target_min_words = 12  # 11x11: aim for 12-16 words
+            target_min_words = 10  # 11x11: aim for 10-14 words (reduced from 12)
         elif self.grid_size <= 13:
-            target_min_words = 16  # 13x13: aim for 16-24 words
+            target_min_words = 12  # 13x13: aim for 12-18 words (reduced from 16)
         else:  # 15x15
-            target_min_words = 22  # 15x15: aim for 22-32 words
+            target_min_words = 15  # 15x15: aim for 15-22 words (reduced from 22)
 
         # Try multiple times with different patterns
         for attempt in range(self.max_attempts):
@@ -411,7 +412,17 @@ class AdvancedCrosswordGenerator:
         self.placements = []
         self.used_words = set()
         self.backtrack_steps = 0
-        self.max_backtrack_steps = 10000  # Prevent infinite loops
+
+        # Scale backtrack limit based on grid size
+        # Larger grids need more exploration steps
+        if self.grid_size <= 9:
+            self.max_backtrack_steps = 10000
+        elif self.grid_size <= 11:
+            self.max_backtrack_steps = 25000
+        elif self.grid_size <= 13:
+            self.max_backtrack_steps = 40000
+        else:  # 15x15
+            self.max_backtrack_steps = 60000
 
         # Shuffle for variety
         import random
