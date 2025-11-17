@@ -88,7 +88,9 @@ def generate():
                     {
                         'number': clue['number'],
                         'clue': clue['clue'],
-                        'length': clue['length']
+                        'length': clue['length'],
+                        'row': clue['row'],
+                        'col': clue['col']
                     }
                     for clue in puzzle['clues']['across']
                 ],
@@ -96,7 +98,9 @@ def generate():
                     {
                         'number': clue['number'],
                         'clue': clue['clue'],
-                        'length': clue['length']
+                        'length': clue['length'],
+                        'row': clue['row'],
+                        'col': clue['col']
                     }
                     for clue in puzzle['clues']['down']
                 ]
@@ -264,7 +268,9 @@ def get_puzzle():
                 {
                     'number': clue['number'],
                     'clue': clue['clue'],
-                    'length': clue['length']
+                    'length': clue['length'],
+                    'row': clue['row'],
+                    'col': clue['col']
                 }
                 for clue in current_puzzle['clues']['across']
             ],
@@ -272,7 +278,9 @@ def get_puzzle():
                 {
                     'number': clue['number'],
                     'clue': clue['clue'],
-                    'length': clue['length']
+                    'length': clue['length'],
+                    'row': clue['row'],
+                    'col': clue['col']
                 }
                 for clue in current_puzzle['clues']['down']
             ]
