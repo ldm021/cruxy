@@ -342,15 +342,17 @@ class AdvancedCrosswordGenerator:
 
     def _initialize_grid(self):
         """Initialize grid with flexible black square pattern."""
-        self.black_squares = self._generate_flexible_pattern()
+        # For advanced generator, start with NO black squares
+        # Let them emerge naturally from word placement
+        # This is more flexible and prevents blocking issues
+        self.black_squares = set()
 
         # Create grid
         self.grid = [[Cell() for _ in range(self.grid_size)]
                      for _ in range(self.grid_size)]
 
-        # Mark black squares
-        for row, col in self.black_squares:
-            self.grid[row][col].is_blocked = True
+        # No pre-placed black squares for advanced mode
+        # Words will create the pattern organically
 
     def _find_all_slots(self) -> List[Tuple[int, int, int, Direction]]:
         """
@@ -401,31 +403,136 @@ class AdvancedCrosswordGenerator:
 
     def _try_generate_strategic(self, word_data: List[Dict[str, str]], min_words: int) -> bool:
         """
-        Strategic generation using human-like approach.
-
-        1. Create flexible grid pattern
-        2. Order words strategically (longest first)
-        3. Use lookahead to evaluate placements
-        4. Fill with constraint propagation
+        Strategic generation - simplified version using standard backtracking
+        with word scoring for better results.
         """
-        # Initialize grid with pattern
+        # Initialize empty grid (no pre-placed black squares)
         self._initialize_grid()
         self.placements = []
         self.used_words = set()
         self.backtrack_steps = 0
-        self.max_backtrack_steps = 5000  # Prevent infinite loops
+        self.max_backtrack_steps = 10000  # Prevent infinite loops
 
-        # Get strategic word order
-        ordered_words = self._get_placement_order(word_data)
+        # Shuffle for variety
+        import random
+        words_to_use = list(word_data)
+        random.shuffle(words_to_use)
 
-        # Limit attempts for performance
-        max_words_to_try = min(len(ordered_words), 80)
-        ordered_words = ordered_words[:max_words_to_try]
-
-        # Try to place words using strategic backtracking
-        success = self._strategic_backtrack(ordered_words, 0, min_words)
+        # Try to place words using simpler backtracking
+        success = self._simple_backtrack(words_to_use, 0, min_words)
 
         return success and len(self.placements) >= min_words
+
+    def _simple_backtrack(self, word_data: List[Dict[str, str]], index: int, min_words: int) -> bool:
+        """Simpler backtracking using intersection-based placement (like standard generator)."""
+        # Check backtrack limit
+        self.backtrack_steps += 1
+        if self.backtrack_steps > self.max_backtrack_steps:
+            return False
+
+        # Success condition
+        if len(self.placements) >= min_words:
+            return True
+
+        # Tried all words
+        if index >= len(word_data):
+            return len(self.placements) >= min_words
+
+        word_info = word_data[index]
+        word = word_info['word'].upper()
+        clue = word_info['clue']
+
+        # Skip if already used
+        if word in self.used_words:
+            return self._simple_backtrack(word_data, index + 1, min_words)
+
+        # Get possible placements using simpler intersection logic
+        possible_placements = self._get_simple_placements(word, clue)
+
+        # Shuffle and limit
+        if len(possible_placements) > 10:
+            import random
+            random.shuffle(possible_placements)
+            possible_placements = possible_placements[:10]
+
+        # Try each placement
+        for placement in possible_placements:
+            if self._can_place_word(placement):
+                self._place_word(placement)
+
+                if self._simple_backtrack(word_data, index + 1, min_words):
+                    return True
+
+                self._remove_word(placement)
+
+        # Also try skipping this word
+        if self._simple_backtrack(word_data, index + 1, min_words):
+            return True
+
+        return False
+
+    def _get_simple_placements(self, word: str, clue: str) -> List[WordPlacement]:
+        """Get placements using intersection-based approach (simpler than slot-based)."""
+        placements = []
+        word_length = len(word)
+
+        # First word: place in center
+        if len(self.placements) == 0:
+            center = self.grid_size // 2
+            # Try horizontal
+            start_col = center - word_length // 2
+            if 0 <= start_col and start_col + word_length <= self.grid_size:
+                placements.append(WordPlacement(
+                    word=word, row=center, col=start_col,
+                    direction=Direction.ACROSS, clue=clue
+                ))
+            return placements
+
+        # For subsequent words, find intersections with existing words
+        for existing in self.placements:
+            intersections = self._find_intersections(word, existing)
+            for row, col, direction in intersections:
+                placements.append(WordPlacement(
+                    word=word, row=row, col=col,
+                    direction=direction, clue=clue
+                ))
+
+        return placements
+
+    def _find_intersections(self, new_word: str, existing: WordPlacement) -> List[Tuple[int, int, Direction]]:
+        """Find valid intersection points between a new word and existing word."""
+        intersections = []
+
+        for i, new_char in enumerate(new_word):
+            for j, existing_char in enumerate(existing.word):
+                if new_char == existing_char:
+                    # Calculate position for new word
+                    if existing.direction == Direction.ACROSS:
+                        # New word should be DOWN
+                        new_row = existing.row - i
+                        new_col = existing.col + j
+                        direction = Direction.DOWN
+                    else:
+                        # New word should be ACROSS
+                        new_row = existing.row + j
+                        new_col = existing.col - i
+                        direction = Direction.ACROSS
+
+                    # Check if position is valid
+                    if self._is_valid_position(new_word, new_row, new_col, direction):
+                        intersections.append((new_row, new_col, direction))
+
+        return intersections
+
+    def _is_valid_position(self, word: str, row: int, col: int, direction: Direction) -> bool:
+        """Check if a word can be placed at the given position (bounds check only)."""
+        if direction == Direction.ACROSS:
+            if col < 0 or col + len(word) > self.grid_size or row < 0 or row >= self.grid_size:
+                return False
+        else:  # DOWN
+            if row < 0 or row + len(word) > self.grid_size or col < 0 or col >= self.grid_size:
+                return False
+        return True
 
     def _strategic_backtrack(self, word_data: List[Dict[str, str]], index: int, min_words: int) -> bool:
         """
@@ -472,6 +579,9 @@ class AdvancedCrosswordGenerator:
                     return True
 
                 self._remove_word(placement)
+            # Debug: if first word can't be placed, log why
+            elif len(self.placements) == 0 and index == 0:
+                print(f"[DEBUG] First word '{word}' rejected at ({placement.row}, {placement.col}) {placement.direction}")
 
         # Also try skipping this word
         if self._strategic_backtrack(word_data, index + 1, min_words):
@@ -682,9 +792,12 @@ class AdvancedCrosswordGenerator:
             for col in range(self.grid_size):
                 cell = self.grid[row][col]
 
+                # Mark cells as blocked if they have no letter (empty spaces become black squares)
+                is_blocked = cell.letter is None
+
                 cell_data = {
                     'number': cell.number,
-                    'blocked': cell.is_blocked
+                    'blocked': is_blocked
                 }
                 grid_row.append(cell_data)
                 solution_row.append(cell.letter if cell.letter else '')
