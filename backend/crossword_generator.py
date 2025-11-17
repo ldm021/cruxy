@@ -416,43 +416,68 @@ class CrosswordGenerator:
 
     def _get_possible_placements(self, word: str, clue: str) -> List[WordPlacement]:
         """
-        Get all possible placements for a word using slot-based placement.
+        Get all possible placements for a word.
 
-        PHASE 1: Now uses slots (contiguous white squares) instead of intersections.
-        This works much better with pre-placed black square patterns.
+        PHASE 1: Uses slot-based placement if enabled.
+        Standard: Uses intersection-based placement (original algorithm).
         """
         placements = []
         word_length = len(word)
 
-        # Find all available slots in the grid
-        slots = self._find_all_slots()
+        # If Phase 1 is enabled, use slot-based placement
+        if self.use_phase1:
+            # Find all available slots in the grid
+            slots = self._find_all_slots()
 
-        # Try to fit the word in each slot of matching length
-        for row, col, slot_length, direction in slots:
-            # Word must fit exactly or be shorter than the slot
-            if word_length > slot_length:
-                continue
+            # Try to fit the word in each slot of matching length
+            for row, col, slot_length, direction in slots:
+                # Word must fit exactly or be shorter than the slot
+                if word_length > slot_length:
+                    continue
 
-            # If word is shorter than slot, try different positions within the slot
-            for offset in range(slot_length - word_length + 1):
-                if direction == Direction.ACROSS:
-                    placement = WordPlacement(
-                        word=word,
-                        row=row,
-                        col=col + offset,
-                        direction=direction,
-                        clue=clue
-                    )
-                else:  # DOWN
-                    placement = WordPlacement(
-                        word=word,
-                        row=row + offset,
-                        col=col,
-                        direction=direction,
-                        clue=clue
-                    )
+                # If word is shorter than slot, try different positions within the slot
+                for offset in range(slot_length - word_length + 1):
+                    if direction == Direction.ACROSS:
+                        placement = WordPlacement(
+                            word=word,
+                            row=row,
+                            col=col + offset,
+                            direction=direction,
+                            clue=clue
+                        )
+                    else:  # DOWN
+                        placement = WordPlacement(
+                            word=word,
+                            row=row + offset,
+                            col=col,
+                            direction=direction,
+                            clue=clue
+                        )
 
-                placements.append(placement)
+                    placements.append(placement)
+
+        else:
+            # Standard mode: Use original intersection-based placement
+            # If this is the first word, place it in the center
+            if len(self.placements) == 0:
+                center = self.grid_size // 2
+                # Try horizontal placement
+                start_col = center - len(word) // 2
+                if start_col >= 0 and start_col + len(word) <= self.grid_size:
+                    placements.append(WordPlacement(
+                        word=word, row=center, col=start_col,
+                        direction=Direction.ACROSS, clue=clue
+                    ))
+                return placements
+
+            # For subsequent words, find intersection points
+            for existing in self.placements:
+                intersections = self._find_intersections(word, existing)
+                for row, col, direction in intersections:
+                    placements.append(WordPlacement(
+                        word=word, row=row, col=col,
+                        direction=direction, clue=clue
+                    ))
 
         return placements
 
@@ -748,7 +773,8 @@ class CrosswordGenerator:
         """
         Export the puzzle data.
 
-        PHASE 1: Now properly marks black squares as blocked.
+        PHASE 1: Marks pre-placed black squares as blocked.
+        Standard: Marks empty cells (no letters) as blocked.
         """
         # Number the grid
         self._number_grid()
@@ -762,9 +788,18 @@ class CrosswordGenerator:
             solution_row = []
             for col in range(self.grid_size):
                 cell = self.grid[row][col]
+
+                # Determine if cell should be marked as blocked
+                if self.use_phase1:
+                    # Phase 1: Use explicit black square marking
+                    is_blocked = cell.is_blocked
+                else:
+                    # Standard: Empty cells (no letter) are black squares
+                    is_blocked = (cell.letter is None)
+
                 cell_data = {
                     'number': cell.number,
-                    'blocked': cell.is_blocked  # PHASE 1: Use explicit black square marking
+                    'blocked': is_blocked
                 }
                 grid_row.append(cell_data)
                 solution_row.append(cell.letter if cell.letter else '')
