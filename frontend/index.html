@@ -18,6 +18,20 @@
             <button id="checkBtn" class="btn btn-secondary" disabled>Check Answers</button>
             <button id="revealBtn" class="btn btn-secondary" disabled>Reveal Solution</button>
 
+            <div class="generator-mode-control">
+                <label>Generator Mode:</label>
+                <div class="mode-options">
+                    <label class="radio-label">
+                        <input type="radio" name="generatorMode" value="standard" checked>
+                        Standard Generator
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="generatorMode" value="advanced">
+                        Advanced Heuristics
+                    </label>
+                </div>
+            </div>
+
             <div class="grid-size-control">
                 <label for="gridSize">Grid Size:</label>
                 <select id="gridSize">
@@ -39,6 +53,28 @@
         </div>
 
         <div id="message" class="message"></div>
+
+        <div id="metrics" class="metrics-container" style="display: none;">
+            <h3>Generation Metrics</h3>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <span class="metric-label">Mode:</span>
+                    <span id="metric-mode" class="metric-value">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Generation Time:</span>
+                    <span id="metric-time" class="metric-value">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Words Placed:</span>
+                    <span id="metric-words" class="metric-value">-</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Grid Size:</span>
+                    <span id="metric-size" class="metric-value">-</span>
+                </div>
+            </div>
+        </div>
 
         <div id="puzzleContainer" class="puzzle-container">
             <div class="grid-section">

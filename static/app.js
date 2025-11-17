@@ -5,6 +5,7 @@ class CrosswordApp {
         this.currentPuzzle = null;
         this.gridSize = 9;
         this.difficulty = 'medium';
+        this.generatorMode = 'standard';
         this.userGrid = [];
         this.currentDirection = 'across'; // Track cursor direction
         this.currentCell = null; // Track active cell {row, col}
@@ -22,6 +23,11 @@ class CrosswordApp {
         this.messageDiv = document.getElementById('message');
         this.directionIndicator = document.getElementById('directionIndicator');
         this.directionText = document.getElementById('directionText');
+        this.metricsContainer = document.getElementById('metrics');
+        this.metricMode = document.getElementById('metric-mode');
+        this.metricTime = document.getElementById('metric-time');
+        this.metricWords = document.getElementById('metric-words');
+        this.metricSize = document.getElementById('metric-size');
 
         this.initializeEventListeners();
     }
@@ -35,6 +41,14 @@ class CrosswordApp {
         });
         this.difficultySelect.addEventListener('change', (e) => {
             this.difficulty = e.target.value;
+        });
+
+        // Generator mode radio buttons
+        const modeRadios = document.querySelectorAll('input[name="generatorMode"]');
+        modeRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                this.generatorMode = e.target.value;
+            });
         });
     }
 
@@ -50,7 +64,8 @@ class CrosswordApp {
                 },
                 body: JSON.stringify({
                     grid_size: this.gridSize,
-                    difficulty: this.difficulty
+                    difficulty: this.difficulty,
+                    mode: this.generatorMode
                 })
             });
 
@@ -63,6 +78,12 @@ class CrosswordApp {
             this.initializeUserGrid();
             this.renderPuzzle();
             this.enableButtons();
+
+            // Display metrics if available
+            if (this.currentPuzzle.metrics) {
+                this.displayMetrics(this.currentPuzzle.metrics);
+            }
+
             this.showMessage(`Puzzle generated successfully! Difficulty: ${this.difficulty.charAt(0).toUpperCase() + this.difficulty.slice(1)}. Start solving.`, 'success');
 
         } catch (error) {
@@ -569,6 +590,24 @@ class CrosswordApp {
             setTimeout(() => {
                 this.messageDiv.className = 'message';
             }, 5000);
+        }
+    }
+
+    displayMetrics(metrics) {
+        // Show metrics container
+        this.metricsContainer.style.display = 'block';
+
+        // Update metric values
+        this.metricMode.textContent = metrics.mode === 'standard' ? 'Standard Generator' : 'Advanced Heuristics';
+        this.metricTime.textContent = `${metrics.generation_time}s`;
+        this.metricWords.textContent = metrics.word_count;
+        this.metricSize.textContent = `${metrics.grid_size}x${metrics.grid_size}`;
+
+        // Add color coding for mode
+        if (metrics.mode === 'advanced') {
+            this.metricMode.style.color = '#667eea';
+        } else {
+            this.metricMode.style.color = '#48bb78';
         }
     }
 }

@@ -6,7 +6,9 @@ Provides API endpoints for generating and serving crossword puzzles.
 from flask import Flask, render_template, jsonify, request, send_from_directory
 import json
 import os
+import time
 from backend.crossword_generator import generate_crossword
+from backend.crossword_generator_advanced import generate_crossword_advanced
 
 app = Flask(__name__,
             template_folder='frontend',
@@ -43,6 +45,7 @@ def generate():
         data = request.get_json() or {}
         grid_size = data.get('grid_size', 9)
         difficulty = data.get('difficulty', 'medium')
+        mode = data.get('mode', 'standard')  # 'standard' or 'advanced'
 
         # Validate grid size
         if not isinstance(grid_size, int) or grid_size < 5 or grid_size > 15:
@@ -56,16 +59,29 @@ def generate():
                 'error': 'Difficulty must be "easy", "medium", or "hard"'
             }), 400
 
+        # Validate mode
+        if mode not in ['standard', 'advanced']:
+            return jsonify({
+                'error': 'Mode must be "standard" or "advanced"'
+            }), 400
+
         # Load word list
         word_list_path = os.path.join(os.path.dirname(__file__), 'data', 'words.json')
         with open(word_list_path, 'r') as f:
             word_list = json.load(f)
 
-        # Generate puzzle
-        print(f"[DEBUG] Attempting to generate {grid_size}x{grid_size} puzzle (difficulty: {difficulty})")
+        # Generate puzzle with timing
+        print(f"[DEBUG] Attempting to generate {grid_size}x{grid_size} puzzle (difficulty: {difficulty}, mode: {mode})")
         print(f"[DEBUG] Word list size: {len(word_list)}")
 
-        puzzle = generate_crossword(word_list, grid_size=grid_size, difficulty=difficulty)
+        start_time = time.time()
+
+        if mode == 'advanced':
+            puzzle = generate_crossword_advanced(word_list, grid_size=grid_size, difficulty=difficulty)
+        else:
+            puzzle = generate_crossword(word_list, grid_size=grid_size, difficulty=difficulty)
+
+        generation_time = time.time() - start_time
 
         if puzzle is None:
             print(f"[DEBUG] Generator returned None - unable to create valid puzzle")
@@ -73,13 +89,14 @@ def generate():
                 'error': 'Failed to generate puzzle. Please try again.'
             }), 500
 
-        print(f"[DEBUG] Puzzle generated successfully!")
-        print(f"[DEBUG] Words placed: {len(puzzle['clues']['across']) + len(puzzle['clues']['down'])}")
+        word_count = len(puzzle['clues']['across']) + len(puzzle['clues']['down'])
+        print(f"[DEBUG] Puzzle generated successfully in {generation_time:.2f}s!")
+        print(f"[DEBUG] Words placed: {word_count}")
 
         # Store puzzle in cache
         current_puzzle = puzzle
 
-        # Return puzzle without solution
+        # Return puzzle without solution + metrics
         response_data = {
             'grid': puzzle['grid'],
             'size': puzzle['size'],
@@ -104,6 +121,14 @@ def generate():
                     }
                     for clue in puzzle['clues']['down']
                 ]
+            },
+            'metrics': {
+                'mode': mode,
+                'generation_time': round(generation_time, 2),
+                'word_count': word_count,
+                'success': True,
+                'grid_size': grid_size,
+                'difficulty': difficulty
             }
         }
 
