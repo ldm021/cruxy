@@ -4,6 +4,7 @@ class CrosswordApp {
     constructor() {
         this.currentPuzzle = null;
         this.gridSize = 9;
+        this.difficulty = 'medium';
         this.userGrid = [];
         this.currentDirection = 'across'; // Track cursor direction
         this.currentCell = null; // Track active cell {row, col}
@@ -14,6 +15,7 @@ class CrosswordApp {
         this.checkBtn = document.getElementById('checkBtn');
         this.revealBtn = document.getElementById('revealBtn');
         this.gridSizeSelect = document.getElementById('gridSize');
+        this.difficultySelect = document.getElementById('difficulty');
         this.gridContainer = document.getElementById('gridContainer');
         this.acrossClues = document.getElementById('acrossClues');
         this.downClues = document.getElementById('downClues');
@@ -31,6 +33,9 @@ class CrosswordApp {
         this.gridSizeSelect.addEventListener('change', (e) => {
             this.gridSize = parseInt(e.target.value);
         });
+        this.difficultySelect.addEventListener('change', (e) => {
+            this.difficulty = e.target.value;
+        });
     }
 
     async generatePuzzle() {
@@ -44,7 +49,8 @@ class CrosswordApp {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    grid_size: this.gridSize
+                    grid_size: this.gridSize,
+                    difficulty: this.difficulty
                 })
             });
 
@@ -57,7 +63,7 @@ class CrosswordApp {
             this.initializeUserGrid();
             this.renderPuzzle();
             this.enableButtons();
-            this.showMessage('Puzzle generated successfully! Start solving.', 'success');
+            this.showMessage(`Puzzle generated successfully! Difficulty: ${this.difficulty.charAt(0).toUpperCase() + this.difficulty.slice(1)}. Start solving.`, 'success');
 
         } catch (error) {
             console.error('Error generating puzzle:', error);

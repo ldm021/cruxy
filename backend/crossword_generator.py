@@ -51,20 +51,31 @@ class CrosswordGenerator:
         self.placements: List[WordPlacement] = []
         self.used_words: Set[str] = set()
 
-    def generate(self, word_data: List[Dict[str, str]]) -> Optional[Dict]:
+    def generate(self, word_data: List[Dict[str, str]], difficulty: str = "medium") -> Optional[Dict]:
         """
         Generate a crossword puzzle.
 
         Args:
-            word_data: List of dicts with 'word' and 'clue' keys
+            word_data: List of dicts with 'word', 'clue', and 'difficulty' keys
+            difficulty: Difficulty level ("easy", "medium", or "hard")
 
         Returns:
             Dictionary with grid and clues, or None if generation failed
         """
+        # Filter words by difficulty
+        difficulty_filtered = [
+            w for w in word_data
+            if w.get('difficulty', 'medium') == difficulty
+        ]
+
+        # If not enough words for this difficulty, fall back to all words
+        if len(difficulty_filtered) < 20:
+            difficulty_filtered = word_data
+
         # Filter words that are too long for the grid
         max_word_length = self.grid_size - 1  # Leave some room
         filtered_words = [
-            w for w in word_data
+            w for w in difficulty_filtered
             if 3 <= len(w['word']) <= max_word_length
         ]
 
@@ -89,16 +100,29 @@ class CrosswordGenerator:
             sample_size = min(len(words_of_length), max(3, self.grid_size // 2))
             selected_words.extend(random.sample(words_of_length, sample_size))
 
+        # Determine min_words based on difficulty
+        # Hard words are longer and harder to place, so we need fewer of them
+        if difficulty == "easy":
+            target_min_words = max(6, min(8, len(selected_words) // 3))
+        elif difficulty == "hard":
+            target_min_words = max(6, min(8, len(selected_words) // 3))  # Same as easy, but with harder words
+        else:  # medium
+            target_min_words = max(7, min(9, len(selected_words) // 3))
+
         # Try multiple times to generate a valid puzzle
         for attempt in range(self.max_attempts):
-            if self._try_generate(selected_words):
+            if self._try_generate(selected_words, target_min_words):
                 return self._export_puzzle()
 
         return None
 
-    def _try_generate(self, word_data: List[Dict[str, str]]) -> bool:
+    def _try_generate(self, word_data: List[Dict[str, str]], min_words: int = 8) -> bool:
         """
         Attempt to generate a crossword puzzle.
+
+        Args:
+            word_data: List of word dictionaries
+            min_words: Minimum number of words needed for a valid puzzle
 
         Returns:
             True if successful, False otherwise
@@ -115,8 +139,6 @@ class CrosswordGenerator:
         random.shuffle(words_to_use)
 
         # Try to place words using backtracking
-        # Aim for at least 6-8 words for a reasonable puzzle
-        min_words = max(6, min(8, len(words_to_use) // 3))
         return self._backtrack(words_to_use, 0, min_words=min_words)
 
     def _initialize_grid(self):
@@ -444,16 +466,17 @@ class CrosswordGenerator:
         }
 
 
-def generate_crossword(word_list: List[Dict[str, str]], grid_size: int = 9) -> Optional[Dict]:
+def generate_crossword(word_list: List[Dict[str, str]], grid_size: int = 9, difficulty: str = "medium") -> Optional[Dict]:
     """
     Convenience function to generate a crossword puzzle.
 
     Args:
-        word_list: List of dictionaries with 'word' and 'clue' keys
+        word_list: List of dictionaries with 'word', 'clue', and 'difficulty' keys
         grid_size: Size of the grid (default 9)
+        difficulty: Difficulty level ("easy", "medium", or "hard")
 
     Returns:
         Puzzle data dictionary or None if generation failed
     """
     generator = CrosswordGenerator(grid_size=grid_size)
-    return generator.generate(word_list)
+    return generator.generate(word_list, difficulty=difficulty)

@@ -30,6 +30,7 @@ def generate():
     Request body (optional):
         {
             "grid_size": 9,  // Size of the grid (default: 9)
+            "difficulty": "medium"  // Difficulty level: "easy", "medium", or "hard" (default: "medium")
         }
 
     Returns:
@@ -41,11 +42,18 @@ def generate():
         # Get parameters from request
         data = request.get_json() or {}
         grid_size = data.get('grid_size', 9)
+        difficulty = data.get('difficulty', 'medium')
 
         # Validate grid size
         if not isinstance(grid_size, int) or grid_size < 5 or grid_size > 15:
             return jsonify({
                 'error': 'Grid size must be between 5 and 15'
+            }), 400
+
+        # Validate difficulty
+        if difficulty not in ['easy', 'medium', 'hard']:
+            return jsonify({
+                'error': 'Difficulty must be "easy", "medium", or "hard"'
             }), 400
 
         # Load word list
@@ -54,7 +62,7 @@ def generate():
             word_list = json.load(f)
 
         # Generate puzzle
-        puzzle = generate_crossword(word_list, grid_size=grid_size)
+        puzzle = generate_crossword(word_list, grid_size=grid_size, difficulty=difficulty)
 
         if puzzle is None:
             return jsonify({

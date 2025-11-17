@@ -116,6 +116,37 @@ h1 {
     background: white;
 }
 
+.difficulty-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.difficulty-control label {
+    font-weight: 600;
+    color: #333;
+}
+
+.difficulty-control select {
+    padding: 8px 12px;
+    border: 2px solid #764ba2;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.difficulty-control select:hover {
+    border-color: #667eea;
+}
+
+.difficulty-control select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
 /* Message */
 .message {
     padding: 15px;
