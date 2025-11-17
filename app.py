@@ -62,12 +62,19 @@ def generate():
             word_list = json.load(f)
 
         # Generate puzzle
+        print(f"[DEBUG] Attempting to generate {grid_size}x{grid_size} puzzle (difficulty: {difficulty})")
+        print(f"[DEBUG] Word list size: {len(word_list)}")
+
         puzzle = generate_crossword(word_list, grid_size=grid_size, difficulty=difficulty)
 
         if puzzle is None:
+            print(f"[DEBUG] Generator returned None - unable to create valid puzzle")
             return jsonify({
                 'error': 'Failed to generate puzzle. Please try again.'
             }), 500
+
+        print(f"[DEBUG] Puzzle generated successfully!")
+        print(f"[DEBUG] Words placed: {len(puzzle['clues']['across']) + len(puzzle['clues']['down'])}")
 
         # Store puzzle in cache
         current_puzzle = puzzle

@@ -37,15 +37,18 @@ class Cell:
 class CrosswordGenerator:
     """Generates crossword puzzles using backtracking algorithm."""
 
-    def __init__(self, grid_size: int = 9, max_attempts: int = 100):
+    def __init__(self, grid_size: int = 9, max_attempts: int = 100, use_phase1: bool = False):
         """
         Initialize the crossword generator.
 
         Args:
             grid_size: Size of the square grid (default 9x9)
             max_attempts: Maximum attempts to generate a puzzle
+            use_phase1: Enable Phase 1 features (symmetric black squares, strict validation)
         """
         self.grid_size = grid_size
+        self.use_phase1 = use_phase1  # Toggle for Phase 1 features
+
         # Adjust max_attempts based on grid size for better success rate
         if grid_size <= 9:
             self.max_attempts = max_attempts
@@ -115,23 +118,37 @@ class CrosswordGenerator:
         # Shuffle to add variety
         random.shuffle(selected_words)
 
-        # PHASE 1: Professional word count targets
-        # Pragmatic targets that balance quality with achievability
-        # Still significantly higher than the original 6-9 words
-        if self.grid_size <= 9:
-            target_min_words = 10  # 9x9: 10-14 words (was 6-9, ideal 12-16)
-        elif self.grid_size <= 11:
-            target_min_words = 12  # 11x11: 12-18 words (ideal 16-22)
-        elif self.grid_size <= 13:
-            target_min_words = 16  # 13x13: 16-24 words (ideal 20-28)
-        else:  # 15x15
-            target_min_words = 22  # 15x15: 22-32 words (ideal 28-38)
+        # Word count targets (adjusted based on Phase 1 mode)
+        if self.use_phase1:
+            # PHASE 1: Professional targets
+            if self.grid_size <= 9:
+                target_min_words = 10  # 9x9: 10-14 words (ideal 12-16)
+            elif self.grid_size <= 11:
+                target_min_words = 12  # 11x11: 12-18 words (ideal 16-22)
+            elif self.grid_size <= 13:
+                target_min_words = 16  # 13x13: 16-24 words (ideal 20-28)
+            else:  # 15x15
+                target_min_words = 22  # 15x15: 22-32 words (ideal 28-38)
+        else:
+            # Standard mode: More achievable targets
+            if self.grid_size <= 9:
+                target_min_words = 8  # 9x9: 8-12 words (original was 6-9)
+            elif self.grid_size <= 11:
+                target_min_words = 10  # 11x11: 10-15 words
+            elif self.grid_size <= 13:
+                target_min_words = 12  # 13x13: 12-18 words
+            else:  # 15x15
+                target_min_words = 16  # 15x15: 16-24 words
 
         # Try multiple times to generate a valid puzzle
         for attempt in range(self.max_attempts):
             if self._try_generate(selected_words, target_min_words):
-                # Validate with relaxed constraints
-                if self._validate_puzzle():
+                # Only validate if Phase 1 features are enabled
+                if self.use_phase1:
+                    if self._validate_puzzle():
+                        return self._export_puzzle()
+                else:
+                    # Without Phase 1, accept any puzzle that meets min_words
                     return self._export_puzzle()
 
         return None
@@ -258,18 +275,21 @@ class CrosswordGenerator:
 
     def _initialize_grid(self):
         """
-        Initialize an empty grid with symmetric black square pattern.
+        Initialize an empty grid.
 
-        PHASE 1: This now generates the black square pattern BEFORE word placement.
+        PHASE 1: Generates symmetric black square pattern if use_phase1=True.
         """
-        # Generate symmetric black square pattern
-        self.black_squares = self._generate_symmetric_pattern()
+        # Only generate black squares if Phase 1 is enabled
+        if self.use_phase1:
+            self.black_squares = self._generate_symmetric_pattern()
+        else:
+            self.black_squares = set()  # No pre-placed black squares
 
         # Create the grid
         self.grid = [[Cell() for _ in range(self.grid_size)]
                      for _ in range(self.grid_size)]
 
-        # Mark black squares as blocked
+        # Mark black squares as blocked (only if Phase 1 enabled)
         for row, col in self.black_squares:
             self.grid[row][col].is_blocked = True
 
@@ -781,7 +801,7 @@ class CrosswordGenerator:
         }
 
 
-def generate_crossword(word_list: List[Dict[str, str]], grid_size: int = 9, difficulty: str = "medium") -> Optional[Dict]:
+def generate_crossword(word_list: List[Dict[str, str]], grid_size: int = 9, difficulty: str = "medium", use_phase1: bool = False) -> Optional[Dict]:
     """
     Convenience function to generate a crossword puzzle.
 
@@ -789,9 +809,10 @@ def generate_crossword(word_list: List[Dict[str, str]], grid_size: int = 9, diff
         word_list: List of dictionaries with 'word', 'clue', and 'difficulty' keys
         grid_size: Size of the grid (default 9)
         difficulty: Difficulty level ("easy", "medium", or "hard")
+        use_phase1: Enable Phase 1 features (default: False for stability)
 
     Returns:
         Puzzle data dictionary or None if generation failed
     """
-    generator = CrosswordGenerator(grid_size=grid_size)
+    generator = CrosswordGenerator(grid_size=grid_size, use_phase1=use_phase1)
     return generator.generate(word_list, difficulty=difficulty)
