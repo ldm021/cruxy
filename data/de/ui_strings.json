@@ -5,6 +5,9 @@
   "generate_button": "Rätsel Erstellen",
   "check_button": "Antworten Prüfen",
   "reveal_button": "Lösung Anzeigen",
+  "hint_button": "Hinweis Erhalten",
+  "hint_cell_button": "Buchstabe Zeigen",
+  "hint_word_button": "Wort Zeigen",
   "grid_size_label": "Größe:",
   "difficulty_label": "Schwierigkeit:",
   "difficulty_easy": "Einfach",
@@ -14,6 +17,7 @@
   "down_label": "Senkrecht",
   "direction_across": "WAAGERECHT",
   "direction_down": "SENKRECHT",
+  "hints_used_label": "Hinweise verwendet:",
   "message_generating": "Rätsel wird erstellt...",
   "message_checking": "Antworten werden geprüft...",
   "message_revealing": "Lösung wird angezeigt...",
@@ -22,5 +26,11 @@
   "message_error": "Fehler gefunden",
   "message_generate_error": "Fehler beim Erstellen des Rätsels. Bitte erneut versuchen.",
   "message_check_error": "Fehler beim Prüfen des Rätsels. Bitte erneut versuchen.",
-  "message_reveal_error": "Fehler beim Anzeigen der Lösung. Bitte erneut versuchen."
+  "message_reveal_error": "Fehler beim Anzeigen der Lösung. Bitte erneut versuchen.",
+  "message_hint_cell": "Buchstabe aufgedeckt!",
+  "message_hint_word": "Wort aufgedeckt!",
+  "message_hint_random": "Zufälliger Buchstabe aufgedeckt!",
+  "message_hint_no_cell": "Bitte wählen Sie zuerst eine Zelle (klicken Sie auf eine leere Zelle)",
+  "message_hint_complete": "Das Rätsel ist bereits vollständig!",
+  "message_hint_filled": "Diese Zelle ist bereits ausgefüllt!"
 }

@@ -11,11 +11,16 @@ class CrosswordApp {
         this.currentDirection = 'across'; // Track cursor direction
         this.currentCell = null; // Track active cell {row, col}
         this.wordMap = null; // Map cells to words
+        this.hintsUsed = 0; // Track number of hints used
 
         // DOM elements
         this.generateBtn = document.getElementById('generateBtn');
         this.checkBtn = document.getElementById('checkBtn');
         this.revealBtn = document.getElementById('revealBtn');
+        this.hintBtn = document.getElementById('hintBtn');
+        this.hintCellBtn = document.getElementById('hintCellBtn');
+        this.hintWordBtn = document.getElementById('hintWordBtn');
+        this.hintCounter = document.getElementById('hintCounter');
         this.gridSizeSelect = document.getElementById('gridSize');
         this.difficultySelect = document.getElementById('difficulty');
         this.languageSelect = document.getElementById('language');
@@ -47,6 +52,9 @@ class CrosswordApp {
         this.generateBtn.addEventListener('click', () => this.generatePuzzle());
         this.checkBtn.addEventListener('click', () => this.checkSolution());
         this.revealBtn.addEventListener('click', () => this.revealSolution());
+        this.hintBtn.addEventListener('click', () => this.hintRandomCell());
+        this.hintCellBtn.addEventListener('click', () => this.hintCurrentCell());
+        this.hintWordBtn.addEventListener('click', () => this.hintCurrentWord());
         this.gridSizeSelect.addEventListener('change', (e) => {
             this.gridSize = parseInt(e.target.value);
         });
@@ -92,6 +100,12 @@ class CrosswordApp {
         this.generateBtn.textContent = this.uiStrings.generate_button;
         this.checkBtn.textContent = this.uiStrings.check_button;
         this.revealBtn.textContent = this.uiStrings.reveal_button;
+        this.hintBtn.textContent = this.uiStrings.hint_button;
+        this.hintCellBtn.textContent = this.uiStrings.hint_cell_button;
+        this.hintWordBtn.textContent = this.uiStrings.hint_word_button;
+
+        // Update hint counter
+        this.updateHintCounter();
 
         // Update control labels
         document.querySelector('label[for="language"]').textContent = this.uiStrings.language_label;
@@ -141,6 +155,8 @@ class CrosswordApp {
             this.currentPuzzle = await response.json();
             this.initializeUserGrid();
             this.renderPuzzle();
+            this.hintsUsed = 0;
+            this.updateHintCounter();
             this.enableButtons();
             this.showMessage(`Puzzle generated successfully! Difficulty: ${this.difficulty.charAt(0).toUpperCase() + this.difficulty.slice(1)}. Start solving.`, 'success');
 
@@ -648,9 +664,157 @@ class CrosswordApp {
         }
     }
 
+    updateHintCounter() {
+        if (this.hintCounter && this.uiStrings) {
+            this.hintCounter.textContent = `${this.uiStrings.hints_used_label} ${this.hintsUsed}`;
+        }
+    }
+
+    async revealCell(row, col) {
+        try {
+            const response = await fetch('/api/reveal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ row, col })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to get hint');
+            }
+
+            const result = await response.json();
+            const letter = result.letter;
+
+            // Update user grid and input
+            this.userGrid[row][col] = letter;
+            const input = this.gridContainer.querySelector(
+                `input[data-row="${row}"][data-col="${col}"]`
+            );
+            if (input) {
+                input.value = letter;
+                // Add hint class for visual feedback
+                input.parentElement.classList.add('hint-revealed');
+                setTimeout(() => {
+                    input.parentElement.classList.remove('hint-revealed');
+                }, 2000);
+            }
+
+            this.hintsUsed++;
+            this.updateHintCounter();
+            return true;
+        } catch (error) {
+            console.error('Error getting hint:', error);
+            this.showMessage(`Error: ${error.message}`, 'error');
+            return false;
+        }
+    }
+
+    async hintRandomCell() {
+        if (!this.currentPuzzle) return;
+
+        // Find all empty cells
+        const emptyCells = [];
+        const size = this.currentPuzzle.size;
+        for (let row = 0; row < size; row++) {
+            for (let col = 0; col < size; col++) {
+                if (!this.currentPuzzle.grid[row][col].blocked && !this.userGrid[row][col]) {
+                    emptyCells.push({ row, col });
+                }
+            }
+        }
+
+        if (emptyCells.length === 0) {
+            this.showMessage(this.uiStrings?.message_hint_complete || 'Puzzle is already complete!', 'info');
+            return;
+        }
+
+        // Pick a random empty cell
+        const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        const success = await this.revealCell(randomCell.row, randomCell.col);
+        if (success) {
+            this.showMessage(this.uiStrings?.message_hint_random || 'Random letter revealed!', 'success');
+        }
+    }
+
+    async hintCurrentCell() {
+        if (!this.currentPuzzle || !this.currentCell) {
+            this.showMessage(this.uiStrings?.message_hint_no_cell || 'Please select a cell first', 'info');
+            return;
+        }
+
+        const { row, col } = this.currentCell;
+
+        // Check if cell is already filled
+        if (this.userGrid[row][col]) {
+            this.showMessage(this.uiStrings?.message_hint_filled || 'This cell is already filled!', 'info');
+            return;
+        }
+
+        const success = await this.revealCell(row, col);
+        if (success) {
+            this.showMessage(this.uiStrings?.message_hint_cell || 'Letter revealed!', 'success');
+        }
+    }
+
+    async hintCurrentWord() {
+        if (!this.currentPuzzle || !this.currentCell) {
+            this.showMessage(this.uiStrings?.message_hint_no_cell || 'Please select a cell first', 'info');
+            return;
+        }
+
+        const { row, col } = this.currentCell;
+        const key = `${row}-${col}`;
+        const words = this.wordMap[key];
+
+        if (!words || !words[this.currentDirection]) {
+            this.showMessage(this.uiStrings?.message_hint_no_cell || 'Please select a cell first', 'info');
+            return;
+        }
+
+        const word = words[this.currentDirection];
+        const { row: wordRow, col: wordCol, length } = word;
+
+        // Reveal all cells in the word
+        let revealed = 0;
+        for (let i = 0; i < length; i++) {
+            let cellRow, cellCol;
+
+            if (this.currentDirection === 'across') {
+                cellRow = wordRow;
+                cellCol = wordCol + i;
+            } else {
+                cellRow = wordRow + i;
+                cellCol = wordCol;
+            }
+
+            // Only reveal if not already filled
+            if (!this.userGrid[cellRow][cellCol]) {
+                await this.revealCell(cellRow, cellCol);
+                revealed++;
+                // Small delay between reveals for visual effect
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+        }
+
+        if (revealed > 0) {
+            // Adjust hint counter (already incremented in revealCell)
+            this.hintsUsed -= revealed - 1; // Count as one hint for the whole word
+            this.updateHintCounter();
+            this.showMessage(this.uiStrings?.message_hint_word || 'Word revealed!', 'success');
+        } else {
+            this.showMessage(this.uiStrings?.message_hint_filled || 'This word is already complete!', 'info');
+        }
+    }
+
     enableButtons() {
         this.checkBtn.disabled = false;
         this.revealBtn.disabled = false;
+        this.hintBtn.disabled = false;
+        this.hintCellBtn.disabled = false;
+        this.hintWordBtn.disabled = false;
     }
 
     showMessage(text, type) {

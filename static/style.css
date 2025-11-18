@@ -95,6 +95,53 @@ h1 {
     box-shadow: 0 5px 15px rgba(237, 137, 54, 0.4);
 }
 
+.btn-hint {
+    background: #9f7aea;
+    color: white;
+    font-size: 0.9em;
+    padding: 10px 18px;
+}
+
+.btn-hint:hover:not(:disabled) {
+    background: #805ad5;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(159, 122, 234, 0.4);
+}
+
+.hint-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    background: #f7fafc;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+}
+
+.hint-counter {
+    font-weight: 600;
+    color: #4a5568;
+    margin-left: 10px;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid #cbd5e0;
+    font-size: 0.95em;
+}
+
+.hint-revealed {
+    animation: hintFlash 0.5s ease-in-out 2;
+}
+
+@keyframes hintFlash {
+    0%, 100% {
+        background-color: white;
+    }
+    50% {
+        background-color: #d6bcfa;
+    }
+}
+
 .grid-size-control {
     margin-left: auto;
     display: flex;

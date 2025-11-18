@@ -5,6 +5,9 @@
   "generate_button": "Generate Puzzle",
   "check_button": "Check Answers",
   "reveal_button": "Reveal Solution",
+  "hint_button": "Get Hint",
+  "hint_cell_button": "Reveal Letter",
+  "hint_word_button": "Reveal Word",
   "grid_size_label": "Grid Size:",
   "difficulty_label": "Difficulty:",
   "difficulty_easy": "Easy",
@@ -14,6 +17,7 @@
   "down_label": "Down",
   "direction_across": "ACROSS",
   "direction_down": "DOWN",
+  "hints_used_label": "Hints used:",
   "message_generating": "Generating puzzle...",
   "message_checking": "Checking answers...",
   "message_revealing": "Revealing solution...",
@@ -22,5 +26,11 @@
   "message_error": "error found",
   "message_generate_error": "Failed to generate puzzle. Please try again.",
   "message_check_error": "Failed to check puzzle. Please try again.",
-  "message_reveal_error": "Failed to reveal solution. Please try again."
+  "message_reveal_error": "Failed to reveal solution. Please try again.",
+  "message_hint_cell": "Letter revealed!",
+  "message_hint_word": "Word revealed!",
+  "message_hint_random": "Random letter revealed!",
+  "message_hint_no_cell": "Please select a cell first (click on an empty cell)",
+  "message_hint_complete": "Puzzle is already complete!",
+  "message_hint_filled": "This cell is already filled!"
 }

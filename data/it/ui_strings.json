@@ -5,6 +5,9 @@
   "generate_button": "Genera Cruciverba",
   "check_button": "Verifica Risposte",
   "reveal_button": "Mostra Soluzione",
+  "hint_button": "Ottieni Suggerimento",
+  "hint_cell_button": "Rivela Lettera",
+  "hint_word_button": "Rivela Parola",
   "grid_size_label": "Dimensione:",
   "difficulty_label": "Difficoltà:",
   "difficulty_easy": "Facile",
@@ -14,6 +17,7 @@
   "down_label": "Verticali",
   "direction_across": "ORIZZONTALE",
   "direction_down": "VERTICALE",
+  "hints_used_label": "Suggerimenti usati:",
   "message_generating": "Generazione cruciverba...",
   "message_checking": "Verifica risposte...",
   "message_revealing": "Mostrando soluzione...",
@@ -22,5 +26,11 @@
   "message_error": "errore trovato",
   "message_generate_error": "Errore nella generazione del cruciverba. Riprova.",
   "message_check_error": "Errore nella verifica del cruciverba. Riprova.",
-  "message_reveal_error": "Errore nel mostrare la soluzione. Riprova."
+  "message_reveal_error": "Errore nel mostrare la soluzione. Riprova.",
+  "message_hint_cell": "Lettera rivelata!",
+  "message_hint_word": "Parola rivelata!",
+  "message_hint_random": "Lettera casuale rivelata!",
+  "message_hint_no_cell": "Seleziona prima una cella (fai clic su una cella vuota)",
+  "message_hint_complete": "Il cruciverba è già completo!",
+  "message_hint_filled": "Questa cella è già piena!"
 }

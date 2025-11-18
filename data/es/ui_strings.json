@@ -5,6 +5,9 @@
   "generate_button": "Generar Crucigrama",
   "check_button": "Verificar Respuestas",
   "reveal_button": "Mostrar Solución",
+  "hint_button": "Obtener Pista",
+  "hint_cell_button": "Revelar Letra",
+  "hint_word_button": "Revelar Palabra",
   "grid_size_label": "Tamaño:",
   "difficulty_label": "Dificultad:",
   "difficulty_easy": "Fácil",
@@ -14,6 +17,7 @@
   "down_label": "Verticales",
   "direction_across": "HORIZONTAL",
   "direction_down": "VERTICAL",
+  "hints_used_label": "Pistas usadas:",
   "message_generating": "Generando crucigrama...",
   "message_checking": "Verificando respuestas...",
   "message_revealing": "Mostrando solución...",
@@ -22,5 +26,11 @@
   "message_error": "error encontrado",
   "message_generate_error": "Error al generar el crucigrama. Inténtalo de nuevo.",
   "message_check_error": "Error al verificar el crucigrama. Inténtalo de nuevo.",
-  "message_reveal_error": "Error al mostrar la solución. Inténtalo de nuevo."
+  "message_reveal_error": "Error al mostrar la solución. Inténtalo de nuevo.",
+  "message_hint_cell": "¡Letra revelada!",
+  "message_hint_word": "¡Palabra revelada!",
+  "message_hint_random": "¡Letra aleatoria revelada!",
+  "message_hint_no_cell": "Por favor selecciona una casilla primero (haz clic en una casilla vacía)",
+  "message_hint_complete": "¡El crucigrama ya está completo!",
+  "message_hint_filled": "¡Esta casilla ya está llena!"
 }
