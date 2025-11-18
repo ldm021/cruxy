@@ -5,6 +5,8 @@ class CrosswordApp {
         this.currentPuzzle = null;
         this.gridSize = 9;
         this.difficulty = 'medium';
+        this.language = localStorage.getItem('crosswordLanguage') || 'en';
+        this.uiStrings = null;
         this.userGrid = [];
         this.currentDirection = 'across'; // Track cursor direction
         this.currentCell = null; // Track active cell {row, col}
@@ -16,6 +18,7 @@ class CrosswordApp {
         this.revealBtn = document.getElementById('revealBtn');
         this.gridSizeSelect = document.getElementById('gridSize');
         this.difficultySelect = document.getElementById('difficulty');
+        this.languageSelect = document.getElementById('language');
         this.gridContainer = document.getElementById('gridContainer');
         this.acrossClues = document.getElementById('acrossClues');
         this.downClues = document.getElementById('downClues');
@@ -23,6 +26,20 @@ class CrosswordApp {
         this.directionIndicator = document.getElementById('directionIndicator');
         this.directionText = document.getElementById('directionText');
 
+        this.initializeApp();
+    }
+
+    async initializeApp() {
+        // Set language select to saved value
+        this.languageSelect.value = this.language;
+
+        // Load UI strings
+        await this.loadUIStrings(this.language);
+
+        // Apply UI strings to interface
+        this.applyUIStrings();
+
+        // Initialize event listeners
         this.initializeEventListeners();
     }
 
@@ -36,11 +53,72 @@ class CrosswordApp {
         this.difficultySelect.addEventListener('change', (e) => {
             this.difficulty = e.target.value;
         });
+        this.languageSelect.addEventListener('change', async (e) => {
+            this.language = e.target.value;
+            localStorage.setItem('crosswordLanguage', this.language);
+            await this.loadUIStrings(this.language);
+            this.applyUIStrings();
+            // If there's a puzzle, regenerate to show in new language
+            if (this.currentPuzzle) {
+                await this.generatePuzzle();
+            }
+        });
+    }
+
+    async loadUIStrings(language) {
+        try {
+            const response = await fetch(`/api/ui-strings/${language}`);
+            if (!response.ok) {
+                throw new Error('Failed to load UI strings');
+            }
+            this.uiStrings = await response.json();
+        } catch (error) {
+            console.error('Error loading UI strings:', error);
+            // Fall back to English if loading fails
+            if (language !== 'en') {
+                await this.loadUIStrings('en');
+            }
+        }
+    }
+
+    applyUIStrings() {
+        if (!this.uiStrings) return;
+
+        // Update page title and subtitle
+        document.querySelector('h1').textContent = this.uiStrings.title;
+        document.querySelector('.subtitle').textContent = this.uiStrings.subtitle;
+
+        // Update button labels
+        this.generateBtn.textContent = this.uiStrings.generate_button;
+        this.checkBtn.textContent = this.uiStrings.check_button;
+        this.revealBtn.textContent = this.uiStrings.reveal_button;
+
+        // Update control labels
+        document.querySelector('label[for="language"]').textContent = this.uiStrings.language_label;
+        document.querySelector('label[for="gridSize"]').textContent = this.uiStrings.grid_size_label;
+        document.querySelector('label[for="difficulty"]').textContent = this.uiStrings.difficulty_label;
+
+        // Update difficulty options
+        const difficultyOptions = this.difficultySelect.querySelectorAll('option');
+        difficultyOptions[0].textContent = this.uiStrings.difficulty_easy;
+        difficultyOptions[1].textContent = this.uiStrings.difficulty_medium;
+        difficultyOptions[2].textContent = this.uiStrings.difficulty_hard;
+
+        // Update clue headers if puzzle is loaded
+        if (this.currentPuzzle) {
+            const acrossHeader = document.querySelector('.clues-column h2');
+            const downHeader = document.querySelectorAll('.clues-column h2')[1];
+            if (acrossHeader) acrossHeader.textContent = this.uiStrings.across_label;
+            if (downHeader) downHeader.textContent = this.uiStrings.down_label;
+
+            // Update direction display
+            this.updateDirectionDisplay();
+        }
     }
 
     async generatePuzzle() {
         try {
-            this.showMessage('Generating puzzle...', 'info');
+            this.showMessage(this.uiStrings?.message_generating || 'Generating puzzle...', 'info');
             this.generateBtn.disabled = true;
 
             const response = await fetch('/api/generate', {
@@ -50,13 +128,14 @@ class CrosswordApp {
                 },
                 body: JSON.stringify({
                     grid_size: this.gridSize,
-                    difficulty: this.difficulty
+                    difficulty: this.difficulty,
+                    language: this.language
                 })
             });
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || 'Failed to generate puzzle');
+                throw new Error(error.error || (this.uiStrings?.message_generate_error || 'Failed to generate puzzle'));
             }
 
             this.currentPuzzle = await response.json();
@@ -135,8 +214,10 @@ class CrosswordApp {
     }
 
     updateDirectionDisplay() {
-        if (this.directionText) {
-            this.directionText.textContent = this.currentDirection === 'across' ? 'Across' : 'Down';
+        if (this.directionText && this.uiStrings) {
+            this.directionText.textContent = this.currentDirection === 'across'
+                ? this.uiStrings.direction_across
+                : this.uiStrings.direction_down;
         }
     }
 
@@ -422,6 +503,12 @@ class CrosswordApp {
     renderClues() {
         const { clues } = this.currentPuzzle;
 
+        // Update clue headers with localized text
+        const acrossHeader = document.querySelector('.clues-column h2');
+        const downHeader = document.querySelectorAll('.clues-column h2')[1];
+        if (acrossHeader && this.uiStrings) acrossHeader.textContent = this.uiStrings.across_label;
+        if (downHeader && this.uiStrings) downHeader.textContent = this.uiStrings.down_label;
+
         // Render across clues
         this.acrossClues.innerHTML = clues.across
             .map(clue => this.createClueHTML(clue))
@@ -446,6 +533,7 @@ class CrosswordApp {
     async checkSolution() {
         try {
             this.checkBtn.disabled = true;
+            this.showMessage(this.uiStrings?.message_checking || 'Checking answers...', 'info');
 
             const response = await fetch('/api/check', {
                 method: 'POST',
@@ -459,7 +547,7 @@ class CrosswordApp {
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || 'Failed to check solution');
+                throw new Error(error.error || (this.uiStrings?.message_check_error || 'Failed to check solution'));
             }
 
             const result = await response.json();
@@ -482,7 +570,7 @@ class CrosswordApp {
 
         if (result.correct) {
             this.showMessage(
-                `🎉 Congratulations! Puzzle completed! (100%)`,
+                this.uiStrings?.message_success || 'Congratulations! Puzzle completed successfully!',
                 'success'
             );
         } else {
@@ -496,8 +584,12 @@ class CrosswordApp {
                 }
             });
 
+            const errorText = result.errors.length === 1
+                ? (this.uiStrings?.message_error || 'error found')
+                : (this.uiStrings?.message_errors || 'errors found');
+
             this.showMessage(
-                `Progress: ${result.correctCount}/${result.totalCount} (${result.percentage}%) - ${result.errors.length} error(s) found`,
+                `Progress: ${result.correctCount}/${result.totalCount} (${result.percentage}%) - ${result.errors.length} ${errorText}`,
                 'info'
             );
         }
@@ -510,6 +602,7 @@ class CrosswordApp {
 
         try {
             this.revealBtn.disabled = true;
+            this.showMessage(this.uiStrings?.message_revealing || 'Revealing solution...', 'info');
 
             const response = await fetch('/api/reveal', {
                 method: 'POST',
@@ -521,7 +614,7 @@ class CrosswordApp {
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || 'Failed to reveal solution');
+                throw new Error(error.error || (this.uiStrings?.message_reveal_error || 'Failed to reveal solution'));
             }
 
             const result = await response.json();

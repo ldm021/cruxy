@@ -30,7 +30,8 @@ def generate():
     Request body (optional):
         {
             "grid_size": 9,  // Size of the grid (default: 9)
-            "difficulty": "medium"  // Difficulty level: "easy", "medium", or "hard" (default: "medium")
+            "difficulty": "medium",  // Difficulty level: "easy", "medium", or "hard" (default: "medium")
+            "language": "en"  // Language code: "en", "es", "it", or "de" (default: "en")
         }
 
     Returns:
@@ -43,6 +44,7 @@ def generate():
         data = request.get_json() or {}
         grid_size = data.get('grid_size', 9)
         difficulty = data.get('difficulty', 'medium')
+        language = data.get('language', 'en')
 
         # Validate grid size
         if not isinstance(grid_size, int) or grid_size < 5 or grid_size > 15:
@@ -56,9 +58,15 @@ def generate():
                 'error': 'Difficulty must be "easy", "medium", or "hard"'
             }), 400
 
-        # Load word list
-        word_list_path = os.path.join(os.path.dirname(__file__), 'data', 'words.json')
-        with open(word_list_path, 'r') as f:
+        # Validate language
+        if language not in ['en', 'es', 'it', 'de']:
+            return jsonify({
+                'error': 'Language must be "en", "es", "it", or "de"'
+            }), 400
+
+        # Load word list for the selected language
+        word_list_path = os.path.join(os.path.dirname(__file__), 'data', language, 'words.json')
+        with open(word_list_path, 'r', encoding='utf-8') as f:
             word_list = json.load(f)
 
         # Generate puzzle
@@ -288,6 +296,42 @@ def get_puzzle():
     }
 
     return jsonify(response_data)
+
+
+@app.route('/api/ui-strings/<language>', methods=['GET'])
+def get_ui_strings(language):
+    """
+    Get UI strings for the specified language.
+
+    Args:
+        language: Language code ("en", "es", "it", or "de")
+
+    Returns:
+        JSON with UI strings or error message
+    """
+    try:
+        # Validate language
+        if language not in ['en', 'es', 'it', 'de']:
+            return jsonify({
+                'error': 'Language must be "en", "es", "it", or "de"'
+            }), 400
+
+        # Load UI strings for the selected language
+        ui_strings_path = os.path.join(os.path.dirname(__file__), 'data', language, 'ui_strings.json')
+        with open(ui_strings_path, 'r', encoding='utf-8') as f:
+            ui_strings = json.load(f)
+
+        return jsonify(ui_strings)
+
+    except FileNotFoundError:
+        return jsonify({
+            'error': f'UI strings file not found for language: {language}'
+        }), 404
+    except Exception as e:
+        print(f"Error loading UI strings: {e}")
+        return jsonify({
+            'error': f'Error loading UI strings: {str(e)}'
+        }), 500
 
 
 if __name__ == '__main__':
