@@ -1,48 +1,13 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+# Ignorados globales del repositorio.
+#
+# Cada proyecto trae los suyos:
+#   legacy-generator/.gitignore  → Python / Flask
+#   pwa/.gitignore               → Node / Vite / Firebase
+#
+# Ojo: no pongas patrones genéricos como `lib/` acá. La PWA tiene carpetas
+# `src/lib/` y `functions/lib/` con código fuente, y un patrón así las excluye
+# en silencio.
 
-# Flask
-instance/
-.webassets-cache
-
-# Environment
-.env
-.venv
-
-# IDE
-.idea/
-*.swp
-*.swo
-*~
-
-# VSCode settings are included for better developer experience
-# Remove .vscode/ from tracking if you want personal settings
-
-# Logs
-*.log
-
-# OS
 .DS_Store
 Thumbs.db
+*.log
