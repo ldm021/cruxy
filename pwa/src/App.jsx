@@ -98,7 +98,7 @@ function SetupNeeded() {
         <h1 className="onboarding__logo">🧩 Cruxy</h1>
         <h2>Falta conectar Firebase</h2>
         <p className="onboarding__lead">
-          Copiá <code>pwa/.env.example</code> a <code>pwa/.env</code> y pegá las
+          Copia <code>pwa/.env.example</code> a <code>pwa/.env</code> y pega las
           credenciales de tu proyecto de Firebase. Están en:
         </p>
         <p className="onboarding__lead">
@@ -225,7 +225,7 @@ export default function App() {
     if (!entry.cells.length) return;
     setDirection(entry.direction);
     setCursor(entry.cells[0]);
-    // Enfocamos acá, dentro del click, y no en un efecto: iOS solo abre el
+    // Enfocamos aquí, dentro del click, y no en un efecto: iOS solo abre el
     // teclado si el foco se pide durante el gesto del usuario.
     gridInputRef.current?.focus({ preventScroll: true });
   }, []);
@@ -319,7 +319,7 @@ export default function App() {
                   push({
                     tone: 'error',
                     title: 'No se pudo cargar',
-                    body: err?.message || 'Probá con otra foto, más derecha y con buena luz.',
+                    body: err?.message || 'Prueba con otra foto, más derecha y con buena luz.',
                   })
                 }
               />
@@ -349,7 +349,7 @@ export default function App() {
         {!loading && !crossword && (
           <div className="empty">
             <p>Todavía no hay ningún crucigrama.</p>
-            <p>Tocá 🧩 arriba a la izquierda y subí la foto de uno.</p>
+            <p>Toca 🧩 arriba a la izquierda y sube la foto de uno.</p>
           </div>
         )}
 

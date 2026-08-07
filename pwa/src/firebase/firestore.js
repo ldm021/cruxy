@@ -69,8 +69,8 @@ export function setCellValue(crosswordId, row, col, value, userName, uid) {
     {
       value,
       filledBy: value ? userName : '',
-      // El uid es lo que usa la Cloud Function para no mandarte un push a vos
-      // mismo cuando completás una palabra.
+      // El uid es lo que usa la Cloud Function para no mandarte un push a ti
+      // mismo cuando completas una palabra.
       filledByUid: value ? uid || '' : '',
       updatedAt: serverTimestamp(),
     },

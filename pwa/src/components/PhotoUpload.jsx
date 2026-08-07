@@ -12,7 +12,7 @@ const STEPS = {
 };
 
 /**
- * Sacar/elegir foto → Storage → Cloud Function `extractCrossword` → Firestore.
+ * Tomar/elegir foto → Storage → Cloud Function `extractCrossword` → Firestore.
  * El usuario nunca ve una API key: la extracción corre en el servidor.
  */
 export function PhotoUpload({ uid, userName, onCreated, onError }) {

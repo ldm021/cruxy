@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 
 /**
  * Modelo con visión que lee la foto. Se puede cambiar sin tocar código con la
- * variable de entorno `CRUXY_MODEL` (por ejemplo, a `claude-sonnet-5` si querés
+ * variable de entorno `CRUXY_MODEL` (por ejemplo, a `claude-sonnet-5` si quieres
  * abaratar la extracción a costa de un poco de precisión).
  */
 export const DEFAULT_MODEL = process.env.CRUXY_MODEL || 'claude-opus-5';
@@ -164,7 +164,7 @@ export async function extractCrosswordFromImage(imageBuffer, mediaType, apiKey) 
     );
   }
   if (message.stop_reason === 'max_tokens') {
-    throw new Error('La respuesta se cortó por longitud: probá con una foto de un crucigrama más chico.');
+    throw new Error('La respuesta se cortó por longitud: prueba con una foto de un crucigrama más chico.');
   }
 
   const textBlock = message.content.find((block) => block.type === 'text');

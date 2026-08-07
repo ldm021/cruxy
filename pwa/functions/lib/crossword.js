@@ -3,7 +3,7 @@
  *
  * Aunque pidamos salida estructurada, la foto puede estar torcida o con
  * sombras y la extracción puede venir con inconsistencias (una fila más corta,
- * una pista que apunta a una casilla negra). Acá dejamos siempre una estructura
+ * una pista que apunta a una casilla negra). Aquí dejamos siempre una estructura
  * coherente y devolvemos las advertencias para poder mirarlas en los logs.
  */
 

@@ -5,8 +5,8 @@
  *   npm run icons
  *
  * Dibuja una mini-grilla de crucigrama (casillas blancas, negras y una letra
- * marcada) sobre el color de marca. Si mas adelante querés un icono diseñado
- * a mano, simplemente reemplazá los archivos de public/icons/.
+ * marcada) sobre el color de marca. Si mas adelante quieres un icono diseñado
+ * a mano, simplemente reemplaza los archivos de public/icons/.
  */
 import { deflateSync } from 'node:zlib';
 import { mkdirSync, writeFileSync } from 'node:fs';

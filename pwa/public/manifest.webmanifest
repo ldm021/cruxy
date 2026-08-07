@@ -1,7 +1,7 @@
 {
   "name": "Cruxy — Crucigramas en familia",
   "short_name": "Cruxy",
-  "description": "Resolvé crucigramas con tu familia, en tiempo real, desde el celular.",
+  "description": "Resuelve crucigramas con tu familia, en tiempo real, desde el celular.",
   "id": "/",
   "start_url": "/",
   "scope": "/",

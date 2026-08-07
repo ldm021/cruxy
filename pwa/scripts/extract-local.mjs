@@ -2,10 +2,13 @@
 /**
  * Prueba la extracción de un crucigrama sin Firebase ni despliegue.
  *
- *   ANTHROPIC_API_KEY=sk-ant-... node scripts/extract-local.mjs foto.jpg
+ *   node scripts/extract-local.mjs foto.jpg
+ *
+ * Toma la key de `functions/.env` (que está en .gitignore) o de
+ * ANTHROPIC_API_KEY en el entorno.
  *
  * Usa exactamente el mismo código que la Cloud Function (`functions/lib/`), así
- * que lo que veas acá es lo que va a guardar la app. Escribe el resultado en
+ * que lo que veas aquí es lo que va a guardar la app. Escribe el resultado en
  * `public/demo-crossword.json`, que es lo que carga el modo demo del navegador:
  *
  *   VITE_DEMO=1 npm run dev
@@ -42,24 +45,52 @@ function parseArgs(argv) {
   return args;
 }
 
+/**
+ * Si la key no viene en el entorno, la busca en `functions/.env` (que está en
+ * .gitignore). Así no hay que pegarla en cada comando ni dejarla en el historial
+ * del shell.
+ */
+async function loadKeyFromEnvFile() {
+  if (process.env.ANTHROPIC_API_KEY) return;
+  for (const candidate of [join(ROOT, 'functions/.env'), join(ROOT, '.env.local')]) {
+    try {
+      const content = await readFile(candidate, 'utf8');
+      const match = content.match(/^\s*ANTHROPIC_API_KEY\s*=\s*(.+)\s*$/m);
+      if (match) {
+        process.env.ANTHROPIC_API_KEY = match[1].trim().replace(/^["']|["']$/g, '');
+        console.log(`🔑 key tomada de ${candidate.replace(ROOT + '/', '')}`);
+        return;
+      }
+    } catch {
+      // El archivo no existe: seguimos con el siguiente.
+    }
+  }
+}
+
 const args = parseArgs(process.argv.slice(2));
+
+await loadKeyFromEnvFile();
 
 if (!args.image) {
   console.error(`
 Falta la imagen.
 
-  ANTHROPIC_API_KEY=sk-ant-... node scripts/extract-local.mjs <foto.jpg>
+  node scripts/extract-local.mjs <foto.jpg>
 `);
   process.exit(1);
 }
 
 if (!process.env.ANTHROPIC_API_KEY) {
   console.error(`
-Falta ANTHROPIC_API_KEY en el entorno.
+Falta la API key de Anthropic. Dos opciones:
 
-  ANTHROPIC_API_KEY=sk-ant-... node scripts/extract-local.mjs ${args.image}
+  1) Guardarla una sola vez (recomendado, el archivo está en .gitignore):
 
-No la escribas en ningún archivo del repo.
+       echo 'ANTHROPIC_API_KEY=sk-ant-...' > functions/.env
+
+  2) Pasarla en el comando:
+
+       ANTHROPIC_API_KEY=sk-ant-... node scripts/extract-local.mjs ${args.image}
 `);
   process.exit(1);
 }
@@ -77,11 +108,17 @@ const { normalizeExtraction, allEntries } = await import(
 const imagePath = resolve(args.image);
 const mediaType = MEDIA_TYPES[extname(imagePath).toLowerCase()];
 if (!mediaType) {
-  console.error(`Formato no soportado: ${extname(imagePath)}. Usá JPEG, PNG o WebP.`);
+  console.error(`Formato no soportado: ${extname(imagePath)}. Usa JPEG, PNG o WebP.`);
   process.exit(1);
 }
 
-const buffer = await readFile(imagePath);
+let buffer;
+try {
+  buffer = await readFile(imagePath);
+} catch {
+  console.error(`No encontré la imagen: ${imagePath}`);
+  process.exit(1);
+}
 console.log(`📷 ${basename(imagePath)} — ${(buffer.length / 1024 / 1024).toFixed(2)} MB`);
 console.log(`🤖 modelo: ${DEFAULT_MODEL}`);
 console.log('⏳ leyendo el crucigrama (esto puede tardar un minuto)…\n');

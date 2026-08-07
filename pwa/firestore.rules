@@ -10,8 +10,8 @@ service cloud.firestore {
     // razonable para un proyecto casero, pero cualquiera que consiga la URL
     // puede entrar.
     //
-    // Para cerrarlo de verdad: entrá a Firebase Console > Authentication >
-    // Usuarios, copiá los UID de tu familia y pegalos en la lista de abajo.
+    // Para cerrarlo de verdad: entra a Firebase Console > Authentication >
+    // Usuarios, copia los UID de tu familia y pégalos en la lista de abajo.
     // Con la lista no vacía, solo esos UID pueden leer y escribir.
     // -----------------------------------------------------------------------
     function allowlist() {
@@ -55,7 +55,7 @@ service cloud.firestore {
         && request.resource.data.status in ['active', 'completed'];
 
       // ---------------------------------------------------------------------
-      // Casillas: acá es donde escribe todo el mundo, así que es la superficie
+      // Casillas: aquí es donde escribe todo el mundo, así que es la superficie
       // que más conviene acotar.
       // ---------------------------------------------------------------------
       match /cells/{cellId} {

@@ -22,25 +22,25 @@ detallados abajo.
 
 ## 1. Crear el proyecto de Firebase
 
-1. Entrá a <https://console.firebase.google.com> → **Agregar proyecto**.
-   Ponele el nombre que quieras (por ejemplo `cruxy`).
-2. **Hacé upgrade al plan Blaze** (⚙ → Uso y facturación). Las Cloud Functions
+1. Entra a <https://console.firebase.google.com> → **Agregar proyecto**.
+   Ponle el nombre que quieras (por ejemplo `cruxy`).
+2. **Haz upgrade al plan Blaze** (⚙ → Uso y facturación). Las Cloud Functions
    no corren en el plan gratuito Spark. Blaze tiene una capa gratuita generosa;
    para 3-5 personas el costo de Firebase va a ser prácticamente cero (lo que sí
    se paga es cada extracción de crucigrama con la API de Claude).
-3. Dentro del proyecto, activá estos cuatro servicios:
-   - **Authentication** → Comenzar → pestaña *Sign-in method* → habilitá
+3. Dentro del proyecto, activa estos cuatro servicios:
+   - **Authentication** → Comenzar → pestaña *Sign-in method* → habilita
      **Anónimo**.
-   - **Firestore Database** → Crear base de datos → modo producción → elegí una
-     región cerca tuyo (`southamerica-east1` si estás en Argentina).
+   - **Firestore Database** → Crear base de datos → modo producción → elige una
+     región cerca de ti (`southamerica-east1` si estás en Argentina).
    - **Storage** → Comenzar → misma región.
-   - **Cloud Messaging** — ya viene activo, no hay que hacer nada acá todavía.
-4. Registrá una **app web**: ⚙ Configuración del proyecto → *Tus apps* → ícono
+   - **Cloud Messaging** — ya viene activo, no hay que hacer nada aquí todavía.
+4. Registra una **app web**: ⚙ Configuración del proyecto → *Tus apps* → ícono
    `</>` → nombre `cruxy-web` → **Registrar app**.
-   Copiá el objeto `firebaseConfig` que aparece.
-5. Sacá la **clave VAPID** para push web: ⚙ Configuración → pestaña *Cloud
+   Copia el objeto `firebaseConfig` que aparece.
+5. Saca la **clave VAPID** para push web: ⚙ Configuración → pestaña *Cloud
    Messaging* → sección **Certificados push web** → *Generar par de claves* →
-   copiá la clave que empieza con `B...`.
+   copia la clave que empieza con `B...`.
 
 ### Pegar las credenciales
 
@@ -49,7 +49,7 @@ cd pwa
 cp .env.example .env
 ```
 
-Editá `.env` con los valores del paso 4 y la clave VAPID del paso 5:
+Edita `.env` con los valores del paso 4 y la clave VAPID del paso 5:
 
 ```
 VITE_FIREBASE_API_KEY=AIza...
@@ -65,7 +65,7 @@ VITE_FUNCTIONS_REGION=us-central1
 Y el ID del proyecto para la CLI:
 
 ```bash
-cp .firebaserc.example .firebaserc   # y reemplazá TU-PROJECT-ID
+cp .firebaserc.example .firebaserc   # y reemplaza TU-PROJECT-ID
 ```
 
 > Estas claves **no son secretas**: viajan igual al navegador de cualquiera que
@@ -80,19 +80,19 @@ Function:
 
 ```bash
 cd pwa
-npm install -g firebase-tools     # si no la tenés
+npm install -g firebase-tools     # si no la tienes
 firebase login
 firebase functions:secrets:set ANTHROPIC_API_KEY
-# pegá la key cuando la pida (empieza con sk-ant-...)
+# pega la key cuando la pida (empieza con sk-ant-...)
 ```
 
-Si es la primera vez que usás secretos en el proyecto, la CLI te va a pedir que
-habilites la API de Secret Manager: decile que sí.
+Si es la primera vez que usas secretos en el proyecto, la CLI te va a pedir que
+habilites la API de Secret Manager: dile que sí.
 
 ### Elegir el modelo
 
 Por defecto se usa **`claude-opus-5`**, que es el que mejor lee fotos de
-crucigramas (grillas torcidas, letra chica, sombras). Para cambiarlo, creá un
+crucigramas (grillas torcidas, letra chica, sombras). Para cambiarlo, crea un
 archivo `functions/.env` con:
 
 ```
@@ -111,7 +111,7 @@ tu proyecto no usa el bucket de Storage por defecto.
 
 ## Probar sin Firebase (modo demo)
 
-Antes de conectar a nadie, podés probar la extracción y jugar vos solo en el
+Antes de conectar a nadie, puedes probar la extracción y jugar tú solo en el
 navegador. No hace falta Firebase para esto — solo la API key de Anthropic.
 
 ### a) Leer un crucigrama de una foto
@@ -121,7 +121,7 @@ cd pwa
 npm install
 npm --prefix functions install
 
-ANTHROPIC_API_KEY=sk-ant-... node scripts/extract-local.mjs ruta/a/la/foto.jpg
+node scripts/extract-local.mjs ruta/a/la/foto.jpg
 ```
 
 Usa exactamente el mismo código que la Cloud Function, así que lo que veas es lo
@@ -136,13 +136,13 @@ longitud, y cualquier advertencia de la validación. El resultado queda en
 VITE_DEMO=1 npm run dev
 ```
 
-Abre <http://localhost:5173>. Funciona igual que la app real — elegís nombre,
-escribís letras, cambiás entre horizontal y vertical, se tachan las pistas
+Abre <http://localhost:5173>. Funciona igual que la app real — eliges nombre,
+escribes letras, cambias entre horizontal y vertical, se tachan las pistas
 completas — pero las letras se guardan solo en tu navegador y no hay push.
 
 > El `public/demo-crossword.json` que viene en el repo es una **transcripción
 > manual** de un crucigrama de revista, para que el modo demo funcione sin
-> gastar una llamada a la API. Corré el script del punto (a) para reemplazarlo
+> gastar una llamada a la API. Corre el script del punto (a) para reemplazarlo
 > por una extracción real.
 
 ### Dos convenciones de numeración
@@ -169,7 +169,7 @@ Para probar todo sin tocar producción (Firestore, Auth, Storage y Functions
 locales):
 
 ```bash
-# poné VITE_USE_EMULATORS=1 en .env
+# pon VITE_USE_EMULATORS=1 en .env
 firebase emulators:start
 npm run dev
 ```
@@ -194,9 +194,9 @@ Al terminar, la CLI imprime la URL:
 Hosting URL: https://TU-PROJECT-ID.web.app
 ```
 
-Ese es el link que le pasás a la familia.
+Ese es el link que le pasas a la familia.
 
-Comandos parciales, por si querés desplegar de a poco:
+Comandos parciales, por si quieres desplegar de a poco:
 
 ```bash
 npm run deploy:hosting     # solo el frontend
@@ -208,8 +208,8 @@ npm run deploy:rules       # solo las reglas de seguridad
 
 ## 5. Instalar la app en el celular
 
-- **Android (Chrome):** abrí la URL → menú ⋮ → *Instalar aplicación*.
-- **iPhone (Safari):** abrí la URL → botón Compartir → *Agregar a pantalla de
+- **Android (Chrome):** abre la URL → menú ⋮ → *Instalar aplicación*.
+- **iPhone (Safari):** abre la URL → botón Compartir → *Agregar a pantalla de
   inicio*.
 
 > En iPhone las **notificaciones push solo funcionan con la app ya agregada a la
@@ -217,8 +217,8 @@ npm run deploy:rules       # solo las reglas de seguridad
 > es una limitación de iOS, no de la app. En Android funcionan igual instalada o
 > no.
 
-La primera vez que entrás, la app pide nombre y avatar. Después, cuando quieras
-recibir avisos, aceptá el permiso de notificaciones que ofrece el navegador.
+La primera vez que entras, la app pide nombre y avatar. Después, cuando quieras
+recibir avisos, acepta el permiso de notificaciones que ofrece el navegador.
 
 ---
 
@@ -228,8 +228,8 @@ Por defecto entra cualquiera que tenga la URL (usa autenticación anónima). Par
 cerrarlo:
 
 1. Que cada uno entre una vez a la app.
-2. Firebase Console → **Authentication** → *Usuarios* → copiá los UID.
-3. Editá `firestore.rules`, función `allowlist()`:
+2. Firebase Console → **Authentication** → *Usuarios* → copia los UID.
+3. Edita `firestore.rules`, función `allowlist()`:
 
    ```
    function allowlist() {
@@ -314,6 +314,6 @@ users/{userId}
 |---|---|
 | "Falta conectar Firebase" al abrir | El `.env` está vacío o mal escrito. Después de editarlo hay que reiniciar `npm run dev`. |
 | La foto sube pero falla la extracción | `firebase functions:log`. Suele ser la key de Anthropic sin configurar, o una foto muy inclinada/borrosa. |
-| La grilla sale mal (filas de más, pistas fuera de lugar) | El campo `extraction.warnings` del documento en Firestore dice exactamente qué se corrigió o descartó. Sacá la foto de frente, con toda la grilla adentro y sin sombras. |
-| No llegan las notificaciones | En iPhone, ¿está la app agregada a la pantalla de inicio? ¿Aceptaron el permiso? ¿Está cargada `VITE_FIREBASE_VAPID_KEY`? Revisá `users/{uid}.fcmToken` en Firestore. |
-| Las letras no se sincronizan | Consola del navegador: si dice `permission-denied`, revisá que las reglas estén desplegadas (`npm run deploy:rules`) y que el UID esté en la `allowlist()` si la usaste. |
+| La grilla sale mal (filas de más, pistas fuera de lugar) | El campo `extraction.warnings` del documento en Firestore dice exactamente qué se corrigió o descartó. Saca la foto de frente, con toda la grilla adentro y sin sombras. |
+| No llegan las notificaciones | En iPhone, ¿está la app agregada a la pantalla de inicio? ¿Aceptaron el permiso? ¿Está cargada `VITE_FIREBASE_VAPID_KEY`? Revisa `users/{uid}.fcmToken` en Firestore. |
+| Las letras no se sincronizan | Consola del navegador: si dice `permission-denied`, revisa que las reglas estén desplegadas (`npm run deploy:rules`) y que el UID esté en la `allowlist()` si la usaste. |

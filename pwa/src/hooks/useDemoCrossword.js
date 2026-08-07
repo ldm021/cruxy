@@ -65,7 +65,7 @@ export function useDemoCrossword(enabled) {
           [cellId(row, col)]: {
             value,
             filledBy: value ? userName : '',
-            // El hook real trae un Timestamp de Firestore; acá alcanza con algo
+            // El hook real trae un Timestamp de Firestore; aquí alcanza con algo
             // que responda a `toMillis()` para que App detecte quién completó.
             updatedAt: { toMillis: () => Date.now() },
           },

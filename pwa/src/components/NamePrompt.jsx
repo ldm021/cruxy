@@ -35,7 +35,7 @@ export function NamePrompt({ initialName = '', initialAvatar = '🙂', onSubmit 
           </label>
 
           <fieldset className="avatars">
-            <legend>Elegí un avatar</legend>
+            <legend>Elige un avatar</legend>
             <div className="avatars__grid">
               {AVATARS.map((emoji) => (
                 <button
