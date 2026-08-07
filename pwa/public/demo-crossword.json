@@ -1,0 +1,1215 @@
+{
+  "id": "demo",
+  "title": "Crucigrama de revista (transcripción manual)",
+  "createdBy": "Transcripción manual",
+  "rows": 10,
+  "cols": 18,
+  "grid": [
+    [
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      }
+    ],
+    [
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      }
+    ],
+    [
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      }
+    ],
+    [
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      }
+    ],
+    [
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      }
+    ],
+    [
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      }
+    ],
+    [
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      }
+    ],
+    [
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      }
+    ],
+    [
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      }
+    ],
+    [
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": true,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      },
+      {
+        "blocked": false,
+        "number": null
+      }
+    ]
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "row": 0,
+        "col": 0,
+        "length": 5,
+        "text": "Enredo de una obra dramática."
+      },
+      {
+        "number": 1,
+        "row": 0,
+        "col": 6,
+        "length": 7,
+        "text": "Habitante de la Pampa."
+      },
+      {
+        "number": 1,
+        "row": 0,
+        "col": 14,
+        "length": 4,
+        "text": "Sulfato de calcio hidratado."
+      },
+      {
+        "number": 2,
+        "row": 1,
+        "col": 0,
+        "length": 6,
+        "text": "Deseosa de obtener una cosa."
+      },
+      {
+        "number": 2,
+        "row": 1,
+        "col": 7,
+        "length": 5,
+        "text": "Aprieto sin efugio o evasiva."
+      },
+      {
+        "number": 2,
+        "row": 1,
+        "col": 13,
+        "length": 5,
+        "text": "Descenso brusco e importante."
+      },
+      {
+        "number": 3,
+        "row": 2,
+        "col": 1,
+        "length": 7,
+        "text": "Revestir algo con paneles."
+      },
+      {
+        "number": 3,
+        "row": 2,
+        "col": 9,
+        "length": 5,
+        "text": "Color rojo subido en el rostro."
+      },
+      {
+        "number": 3,
+        "row": 2,
+        "col": 15,
+        "length": 3,
+        "text": "Primo y yerno del profeta Mahoma."
+      },
+      {
+        "number": 4,
+        "row": 3,
+        "col": 2,
+        "length": 5,
+        "text": "Capital de Guinea-Bisáu."
+      },
+      {
+        "number": 4,
+        "row": 3,
+        "col": 8,
+        "length": 7,
+        "text": "Dureza, tumor o callosidad."
+      },
+      {
+        "number": 4,
+        "row": 3,
+        "col": 16,
+        "length": 2,
+        "text": "Desusado, interjección que se usaba para expresar dolor."
+      },
+      {
+        "number": 5,
+        "row": 4,
+        "col": 0,
+        "length": 3,
+        "text": "Prefijo que significa \"abeja\"."
+      },
+      {
+        "number": 5,
+        "row": 4,
+        "col": 4,
+        "length": 5,
+        "text": "Experimentar una pasión o un sentimiento muy intensos."
+      },
+      {
+        "number": 5,
+        "row": 4,
+        "col": 10,
+        "length": 7,
+        "text": "Aturdir o atolondrar."
+      },
+      {
+        "number": 6,
+        "row": 5,
+        "col": 0,
+        "length": 2,
+        "text": "Onomatopeya para imitar el balido de la oveja."
+      },
+      {
+        "number": 6,
+        "row": 5,
+        "col": 3,
+        "length": 7,
+        "text": "Aguardiente de uva, muy parecido al coñac."
+      },
+      {
+        "number": 6,
+        "row": 5,
+        "col": 11,
+        "length": 5,
+        "text": "Cordillera sudamericana."
+      },
+      {
+        "number": 7,
+        "row": 6,
+        "col": 0,
+        "length": 4,
+        "text": "Tomar o coger con la mano."
+      },
+      {
+        "number": 7,
+        "row": 6,
+        "col": 5,
+        "length": 7,
+        "text": "Observar cautelosamente con algún propósito."
+      },
+      {
+        "number": 7,
+        "row": 6,
+        "col": 13,
+        "length": 5,
+        "text": "Ion con carga negativa."
+      },
+      {
+        "number": 8,
+        "row": 7,
+        "col": 0,
+        "length": 5,
+        "text": "Ciudad del sur de Francia."
+      },
+      {
+        "number": 8,
+        "row": 7,
+        "col": 6,
+        "length": 5,
+        "text": "Niebla mezclada con humo y partículas en suspensión, propia de las ciudades industriales."
+      },
+      {
+        "number": 8,
+        "row": 7,
+        "col": 12,
+        "length": 5,
+        "text": "Maltratar, dar que sentir a alguien."
+      },
+      {
+        "number": 9,
+        "row": 8,
+        "col": 1,
+        "length": 6,
+        "text": "Capital de Amazonas (Brasil)."
+      },
+      {
+        "number": 9,
+        "row": 8,
+        "col": 8,
+        "length": 5,
+        "text": "Prefijo que significa \"araña\"."
+      },
+      {
+        "number": 9,
+        "row": 8,
+        "col": 14,
+        "length": 4,
+        "text": "Parroquia del concejo asturiano de Siero."
+      },
+      {
+        "number": 10,
+        "row": 9,
+        "col": 0,
+        "length": 6,
+        "text": "Coloquial, roto o agujero hecho en una prenda de punto."
+      },
+      {
+        "number": 10,
+        "row": 9,
+        "col": 7,
+        "length": 7,
+        "text": "Participio de \"asomar\"."
+      },
+      {
+        "number": 10,
+        "row": 9,
+        "col": 15,
+        "length": 3,
+        "text": "Río de Suiza que atraviesa Berna, su capital."
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "row": 0,
+        "col": 0,
+        "length": 2,
+        "text": "Matrícula de Togo."
+      },
+      {
+        "number": 1,
+        "row": 3,
+        "col": 0,
+        "length": 5,
+        "text": "Capote con mangas."
+      },
+      {
+        "number": 2,
+        "row": 0,
+        "col": 1,
+        "length": 3,
+        "text": "Estilo musical en que se recita la letra."
+      },
+      {
+        "number": 2,
+        "row": 4,
+        "col": 1,
+        "length": 6,
+        "text": "Sumamente malo, que no puede ser peor."
+      },
+      {
+        "number": 3,
+        "row": 0,
+        "col": 2,
+        "length": 5,
+        "text": "Nabí, entre los árabes, profeta."
+      },
+      {
+        "number": 3,
+        "row": 6,
+        "col": 2,
+        "length": 4,
+        "text": "Encargado de presidir la oración canónica musulmana."
+      },
+      {
+        "number": 4,
+        "row": 0,
+        "col": 3,
+        "length": 4,
+        "text": "Coloquial, moneda."
+      },
+      {
+        "number": 4,
+        "row": 5,
+        "col": 3,
+        "length": 5,
+        "text": "Conjunto de partículas desagregadas de las rocas."
+      },
+      {
+        "number": 5,
+        "row": 0,
+        "col": 4,
+        "length": 6,
+        "text": "Adquirir seso o cordura."
+      },
+      {
+        "number": 5,
+        "row": 7,
+        "col": 4,
+        "length": 3,
+        "text": "Sigla de \"servicio de asistencia técnica\"."
+      },
+      {
+        "number": 6,
+        "row": 1,
+        "col": 5,
+        "length": 6,
+        "text": "Voz o señal de peligro."
+      },
+      {
+        "number": 6,
+        "row": 8,
+        "col": 5,
+        "length": 2,
+        "text": "Kenzaburo…, escritor japonés."
+      },
+      {
+        "number": 7,
+        "row": 2,
+        "col": 6,
+        "length": 7,
+        "text": "Osados, atrevidos."
+      },
+      {
+        "number": 8,
+        "row": 0,
+        "col": 7,
+        "length": 3,
+        "text": "Abreviatura de \"abril\"."
+      },
+      {
+        "number": 8,
+        "row": 4,
+        "col": 7,
+        "length": 4,
+        "text": "Plural de consonante."
+      },
+      {
+        "number": 9,
+        "row": 0,
+        "col": 8,
+        "length": 2,
+        "text": "Abreviatura de \"mártir\"."
+      },
+      {
+        "number": 9,
+        "row": 3,
+        "col": 8,
+        "length": 7,
+        "text": "Anteriores monedas griegas."
+      },
+      {
+        "number": 10,
+        "row": 0,
+        "col": 9,
+        "length": 4,
+        "text": "País sudamericano cuya capital es Lima."
+      },
+      {
+        "number": 10,
+        "row": 5,
+        "col": 9,
+        "length": 5,
+        "text": "En Chile, mejillón."
+      },
+      {
+        "number": 11,
+        "row": 0,
+        "col": 10,
+        "length": 5,
+        "text": "Marta…, actriz española."
+      },
+      {
+        "number": 11,
+        "row": 6,
+        "col": 10,
+        "length": 4,
+        "text": "Prefijo que significa \"falta de diferenciación de los sexos\"."
+      },
+      {
+        "number": 12,
+        "row": 0,
+        "col": 11,
+        "length": 7,
+        "text": "Remachar un clavo."
+      },
+      {
+        "number": 12,
+        "row": 8,
+        "col": 11,
+        "length": 2,
+        "text": "Coloquial, ¡quia!"
+      },
+      {
+        "number": 13,
+        "row": 2,
+        "col": 12,
+        "length": 4,
+        "text": "Municipio de La Rioja."
+      },
+      {
+        "number": 13,
+        "row": 7,
+        "col": 12,
+        "length": 3,
+        "text": "Código del dólar bruneano."
+      },
+      {
+        "number": 14,
+        "row": 1,
+        "col": 13,
+        "length": 7,
+        "text": "Dedicar una victoria a alguien."
+      },
+      {
+        "number": 15,
+        "row": 0,
+        "col": 14,
+        "length": 2,
+        "text": "En el tiempo presente."
+      },
+      {
+        "number": 15,
+        "row": 3,
+        "col": 14,
+        "length": 6,
+        "text": "Diosa griega de la sabiduría."
+      },
+      {
+        "number": 16,
+        "row": 0,
+        "col": 15,
+        "length": 3,
+        "text": "Localidad del municipio de Penafiel (Portugal)."
+      },
+      {
+        "number": 16,
+        "row": 4,
+        "col": 15,
+        "length": 6,
+        "text": "Desusado, asiática."
+      },
+      {
+        "number": 17,
+        "row": 0,
+        "col": 16,
+        "length": 5,
+        "text": "Echar suelas al calzado."
+      },
+      {
+        "number": 17,
+        "row": 6,
+        "col": 16,
+        "length": 4,
+        "text": "Oréade, ninfa de los bosques y montes."
+      },
+      {
+        "number": 18,
+        "row": 0,
+        "col": 17,
+        "length": 4,
+        "text": "Ónice, calcedonia."
+      },
+      {
+        "number": 18,
+        "row": 5,
+        "col": 17,
+        "length": 2,
+        "text": "Símbolo del estaño."
+      },
+      {
+        "number": 18,
+        "row": 8,
+        "col": 17,
+        "length": 2,
+        "text": "Dominio de internet para Surinam."
+      }
+    ]
+  },
+  "status": "active",
+  "extraction": {
+    "model": "transcripción manual — reemplazar con scripts/extract-local.mjs",
+    "warnings": []
+  }
+}

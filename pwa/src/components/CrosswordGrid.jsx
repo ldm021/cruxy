@@ -185,7 +185,13 @@ export function CrosswordGrid({
     <div className="grid-wrapper">
       <div
         className="grid"
-        style={{ gridTemplateColumns: `repeat(${crossword.cols}, 1fr)` }}
+        style={{
+          gridTemplateColumns: `repeat(${crossword.cols}, 1fr)`,
+          // El CSS usa --cols para escalar la letra al ancho de casilla: un
+          // crucigrama de revista de 18 columnas necesita tipografía mucho más
+          // chica que uno de 5.
+          '--cols': crossword.cols,
+        }}
         role="grid"
         aria-label={crossword.title || 'Crucigrama'}
       >

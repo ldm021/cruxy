@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { isConfigured } from './firebase/config';
+import { demoMode, isConfigured } from './firebase/config';
 import { clearAllCells, setCrosswordStatus } from './firebase/firestore';
 import { useAuth } from './hooks/useAuth';
 import { useCrosswordList } from './hooks/useCrosswordList';
 import { useCrosswordSync } from './hooks/useCrosswordSync';
+import { useDemoCrossword } from './hooks/useDemoCrossword';
 import { useNotifications } from './hooks/useNotifications';
 import { CluesPanel } from './components/CluesPanel';
 import { CrosswordGrid } from './components/CrosswordGrid';
@@ -16,6 +17,7 @@ import {
   ACROSS,
   DOWN,
   cellId,
+  entryDescription,
   entryKey,
   entryLabel,
   gridProgress,
@@ -124,9 +126,15 @@ export default function App() {
   const [direction, setDirection] = useState(ACROSS);
   const gridInputRef = useRef(null);
 
-  const crosswordId = selectedId || active?.id || null;
-  const { crossword, values, entries, cellIndex, writeCell, loading, error } =
-    useCrosswordSync(crosswordId);
+  // Los dos hooks corren siempre (no se pueden llamar condicionalmente), pero
+  // el que no corresponde queda inerte: `useCrosswordSync` sin id y
+  // `useDemoCrossword` deshabilitado no hacen ningún pedido.
+  const remote = useCrosswordSync(demoMode ? null : selectedId || active?.id || null);
+  const demo = useDemoCrossword(demoMode);
+  const { crossword, values, entries, cellIndex, writeCell, loading, error } = demoMode
+    ? demo
+    : remote;
+  const crosswordId = crossword?.id ?? (demoMode ? null : selectedId || active?.id || null);
 
   const notifications = useNotifications(auth.uid, (msg) =>
     push({ ...msg, tone: 'info' }),
@@ -135,7 +143,7 @@ export default function App() {
   // Mantener la URL en sintonía: así el link de una notificación abre el
   // crucigrama correcto, y compartir la URL funciona.
   useEffect(() => {
-    if (!crosswordId) return;
+    if (!crosswordId || demoMode) return;
     const url = new URL(window.location.href);
     if (url.searchParams.get('crossword') !== crosswordId) {
       url.searchParams.set('crossword', crosswordId);
@@ -167,7 +175,7 @@ export default function App() {
     const current = new Set(
       entries
         .filter((e) => isEntryComplete(e, values))
-        .map((e) => entryKey(e.number, e.direction)),
+        .map((e) => entryKey(e)),
     );
 
     if (completedRef.current === null) {
@@ -176,13 +184,13 @@ export default function App() {
     }
 
     for (const entry of entries) {
-      const key = entryKey(entry.number, entry.direction);
+      const key = entryKey(entry);
       if (current.has(key) && !completedRef.current.has(key)) {
         if (whoCompleted(entry, values) === auth.name) {
           push({
             tone: 'success',
             title: '¡Palabra completa!',
-            body: `Completaste la ${entryLabel(entry.number, entry.direction)}.`,
+            body: `Completaste la ${entryDescription(entry)}`,
           });
         }
       }
@@ -203,7 +211,7 @@ export default function App() {
     }
     finishedRef.current = true;
     push({ tone: 'success', title: '🎉 ¡Terminado!', body: 'Completaron todo el crucigrama.' });
-    if (crossword.status !== 'completed') {
+    if (!demoMode && crossword.status !== 'completed') {
       setCrosswordStatus(crossword.id, 'completed').catch(() => {});
     }
   }, [crossword, finished, push]);
@@ -225,13 +233,17 @@ export default function App() {
   const handleClear = useCallback(async () => {
     if (!crossword) return;
     if (!window.confirm('¿Borrar todas las letras de este crucigrama?')) return;
+    if (demoMode) {
+      demo.clear();
+      return;
+    }
     await clearAllCells(crossword.id, Object.keys(values));
     if (crossword.status === 'completed') {
       await setCrosswordStatus(crossword.id, 'active').catch(() => {});
     }
-  }, [crossword, values]);
+  }, [crossword, values, demo]);
 
-  if (!isConfigured) return <SetupNeeded />;
+  if (!isConfigured && !demoMode) return <SetupNeeded />;
 
   if (auth.loading) {
     return (
@@ -285,31 +297,43 @@ export default function App() {
 
       {showPicker && (
         <div className="drawer">
-          <PhotoUpload
-            uid={auth.uid}
-            userName={auth.name}
-            onCreated={(id) => {
-              setSelectedId(id);
-              setShowPicker(false);
-              push({ tone: 'success', title: 'Listo', body: 'Crucigrama cargado.' });
-            }}
-            onError={(err) =>
-              push({
-                tone: 'error',
-                title: 'No se pudo cargar',
-                body: err?.message || 'Probá con otra foto, más derecha y con buena luz.',
-              })
-            }
-          />
-          <CrosswordPicker
-            crosswords={crosswords}
-            currentId={crosswordId}
-            onSelect={(id) => {
-              setSelectedId(id);
-              setShowPicker(false);
-            }}
-          />
-          <NotificationsSetting notifications={notifications} onToast={push} />
+          {demoMode ? (
+            <p className="hint">
+              <strong>Modo demo.</strong> Estás viendo{' '}
+              <code>public/demo-crossword.json</code> y las letras se guardan solo
+              en este navegador. Para probar otra foto:
+              <br />
+              <code>node scripts/extract-local.mjs foto.jpg</code>
+            </p>
+          ) : (
+            <>
+              <PhotoUpload
+                uid={auth.uid}
+                userName={auth.name}
+                onCreated={(id) => {
+                  setSelectedId(id);
+                  setShowPicker(false);
+                  push({ tone: 'success', title: 'Listo', body: 'Crucigrama cargado.' });
+                }}
+                onError={(err) =>
+                  push({
+                    tone: 'error',
+                    title: 'No se pudo cargar',
+                    body: err?.message || 'Probá con otra foto, más derecha y con buena luz.',
+                  })
+                }
+              />
+              <CrosswordPicker
+                crosswords={crosswords}
+                currentId={crosswordId}
+                onSelect={(id) => {
+                  setSelectedId(id);
+                  setShowPicker(false);
+                }}
+              />
+              <NotificationsSetting notifications={notifications} onToast={push} />
+            </>
+          )}
 
           {crossword && (
             <button type="button" className="btn btn--ghost btn--block" onClick={handleClear}>

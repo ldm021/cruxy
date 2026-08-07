@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
-import { auth, isConfigured } from '../firebase/config';
+import { auth, demoMode, isConfigured } from '../firebase/config';
 import { getUserProfile, saveUserProfile } from '../firebase/firestore';
 
 const NAME_KEY = 'cruxy:name';
@@ -21,6 +21,18 @@ export function useAuth() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // En modo demo no hay Firebase: la identidad vive solo en este navegador.
+    if (demoMode) {
+      let localUid = localStorage.getItem('cruxy:demo:uid');
+      if (!localUid) {
+        localUid = `demo-${Math.random().toString(36).slice(2, 10)}`;
+        localStorage.setItem('cruxy:demo:uid', localUid);
+      }
+      setUser({ uid: localUid });
+      setLoading(false);
+      return undefined;
+    }
+
     if (!isConfigured) {
       setLoading(false);
       return undefined;
@@ -65,7 +77,7 @@ export function useAuth() {
       setProfile({ name: clean, avatar });
       localStorage.setItem(NAME_KEY, clean);
       localStorage.setItem(AVATAR_KEY, avatar);
-      if (user) await saveUserProfile(user.uid, { name: clean, avatar });
+      if (user && !demoMode) await saveUserProfile(user.uid, { name: clean, avatar });
     },
     [user],
   );

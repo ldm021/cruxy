@@ -41,10 +41,9 @@ export function CluesPanel({
           <li className="clues__empty">Este crucigrama no tiene pistas en esta dirección.</li>
         )}
         {visible.map((entry) => {
-          const key = entryKey(entry.number, entry.direction);
-          const isActive =
-            activeEntry?.number === entry.number &&
-            activeEntry?.direction === entry.direction;
+          const key = entryKey(entry);
+          // Por posición, no por número: varias palabras pueden compartirlo.
+          const isActive = activeEntry ? entryKey(activeEntry) === key : false;
           const done = isEntryComplete(entry, values);
 
           return (

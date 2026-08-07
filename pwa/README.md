@@ -109,6 +109,53 @@ tu proyecto no usa el bucket de Storage por defecto.
 
 ---
 
+## Probar sin Firebase (modo demo)
+
+Antes de conectar a nadie, podés probar la extracción y jugar vos solo en el
+navegador. No hace falta Firebase para esto — solo la API key de Anthropic.
+
+### a) Leer un crucigrama de una foto
+
+```bash
+cd pwa
+npm install
+npm --prefix functions install
+
+ANTHROPIC_API_KEY=sk-ant-... node scripts/extract-local.mjs ruta/a/la/foto.jpg
+```
+
+Usa exactamente el mismo código que la Cloud Function, así que lo que veas es lo
+que va a guardar la app. Imprime en la terminal la grilla que leyó (para
+compararla de un vistazo con la foto), todas las pistas con su posición y
+longitud, y cualquier advertencia de la validación. El resultado queda en
+`public/demo-crossword.json`.
+
+### b) Jugarlo en el navegador
+
+```bash
+VITE_DEMO=1 npm run dev
+```
+
+Abre <http://localhost:5173>. Funciona igual que la app real — elegís nombre,
+escribís letras, cambiás entre horizontal y vertical, se tachan las pistas
+completas — pero las letras se guardan solo en tu navegador y no hay push.
+
+> El `public/demo-crossword.json` que viene en el repo es una **transcripción
+> manual** de un crucigrama de revista, para que el modo demo funcione sin
+> gastar una llamada a la API. Corré el script del punto (a) para reemplazarlo
+> por una extracción real.
+
+### Dos convenciones de numeración
+
+Los crucigramas de periódico numeran **cada palabra** (el número va impreso
+dentro de la casilla). Los de revista española numeran **filas y columnas**: la
+"5 horizontal" es toda la fila 5, que suele contener varias palabras separadas
+por casillas negras. La app soporta las dos: identifica cada palabra por la
+casilla donde empieza, no por su número, y los avisos incluyen el texto de la
+pista para que no haya ambigüedad cuando tres palabras comparten el número.
+
+---
+
 ## 3. Instalar y probar en local
 
 ```bash

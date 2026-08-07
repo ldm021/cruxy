@@ -2,7 +2,13 @@ import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import { getMessaging } from 'firebase-admin/messaging';
 import { onDocumentWritten } from 'firebase-functions/v2/firestore';
 import { logger } from 'firebase-functions';
-import { allEntries, cellId, entryKey, entryLabel, hydrateGrid } from './lib/crossword.js';
+import {
+  allEntries,
+  cellId,
+  entryDescription,
+  entryKey,
+  hydrateGrid,
+} from './lib/crossword.js';
 
 /**
  * Se dispara cada vez que alguien escribe una letra. Si esa letra completó una
@@ -69,12 +75,12 @@ export const checkWordCompletion = onDocumentWritten(
     const toAnnounce = await db.runTransaction(async (tx) => {
       const fresh = await tx.get(crosswordRef);
       const already = fresh.data()?.completed || {};
-      const nuevas = finished.filter((entry) => !already[entryKey(entry.number, entry.direction)]);
+      const nuevas = finished.filter((entry) => !already[entryKey(entry)]);
       if (!nuevas.length) return [];
 
       const update = {};
       for (const entry of nuevas) {
-        update[`completed.${entryKey(entry.number, entry.direction)}`] = {
+        update[`completed.${entryKey(entry)}`] = {
           by: author,
           byUid: authorUid,
           at: FieldValue.serverTimestamp(),
@@ -92,8 +98,8 @@ export const checkWordCompletion = onDocumentWritten(
         crosswordId,
         excludeUid: authorUid,
         title: '🧩 Cruxy',
-        body: `${author} completó la ${entryLabel(entry.number, entry.direction)}`,
-        tag: `${crosswordId}:${entryKey(entry.number, entry.direction)}`,
+        body: `${author} completó la ${entryDescription(entry)}`,
+        tag: `${crosswordId}:${entryKey(entry)}`,
       });
     }
   },

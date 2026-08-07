@@ -17,6 +17,15 @@ export const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY;
 export const functionsRegion =
   import.meta.env.VITE_FUNCTIONS_REGION || 'us-central1';
 
+/**
+ * Modo demo: la app carga `/demo-crossword.json` y guarda las letras en el
+ * navegador, sin Firebase. Sirve para probar la extracción y el rendering uno
+ * mismo antes de conectar a la familia.
+ *
+ *   VITE_DEMO=1 npm run dev
+ */
+export const demoMode = import.meta.env.VITE_DEMO === '1';
+
 /** true cuando el `.env` todavia no fue completado. */
 export const isConfigured = Boolean(
   firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId,
@@ -28,7 +37,7 @@ let db = null;
 let storage = null;
 let functions = null;
 
-if (isConfigured) {
+if (isConfigured && !demoMode) {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
