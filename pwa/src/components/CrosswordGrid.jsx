@@ -30,6 +30,7 @@ export function CrosswordGrid({
 }) {
   const localInputRef = useRef(null);
   const inputRef = externalInputRef || localInputRef;
+  const gridRef = useRef(null);
 
   const activeEntry = cursor
     ? cellIndex.get(cellId(cursor.row, cursor.col))?.[direction]
@@ -166,6 +167,34 @@ export function CrosswordGrid({
     [typeLetter],
   );
 
+  /**
+   * El tamaño de letra tiene que seguir al ancho real de la casilla.
+   *
+   * Calcularlo solo en CSS es frágil: dentro de `font-size` los porcentajes se
+   * miden contra el tamaño de letra del padre, no contra un ancho, y `vw` da el
+   * ancho de la ventana aunque la grilla viva en un contenedor más angosto.
+   * Medir la casilla y publicar el valor en `--cell-size` funciona siempre.
+   */
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return undefined;
+
+    const sync = () => {
+      const cell = grid.querySelector('.cell, .cell--blocked');
+      const width = cell?.getBoundingClientRect().width;
+      if (width > 0) grid.style.setProperty('--cell-size', `${width.toFixed(2)}px`);
+    };
+
+    sync();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', sync);
+      return () => window.removeEventListener('resize', sync);
+    }
+    const observer = new ResizeObserver(sync);
+    observer.observe(grid);
+    return () => observer.disconnect();
+  }, [crossword?.cols, crossword?.rows]);
+
   // Al cambiar de crucigrama, arrancamos en la primera casilla utilizable.
   useEffect(() => {
     if (!crossword || cursor) return;
@@ -184,6 +213,7 @@ export function CrosswordGrid({
   return (
     <div className="grid-wrapper">
       <div
+        ref={gridRef}
         className="grid"
         style={{
           gridTemplateColumns: `repeat(${crossword.cols}, 1fr)`,

@@ -158,13 +158,6 @@ export function normalizeExtraction(raw) {
       }
       seen.add(startKey);
 
-      // En la numeración americana el número va impreso dentro de la casilla.
-      // En la española no hay números en la grilla, así que solo lo copiamos
-      // cuando la palabra realmente arranca ahí una sola vez.
-      if (normalizedGrid[row][col].number == null) {
-        normalizedGrid[row][col].number = number;
-      }
-
       const geometric = runLength(row, col, direction);
       let length = toInt(clue?.length);
       if (length == null || length < 1 || length > geometric) {
@@ -188,6 +181,29 @@ export function normalizeExtraction(raw) {
 
   if (!clues[ACROSS].length && !clues[DOWN].length) {
     throw new Error('No se pudo leer ninguna pista de la imagen.');
+  }
+
+  /*
+   * Números dentro de las casillas.
+   *
+   * Solo existen en la numeración por palabra (estilo periódico), donde van
+   * impresos en la casilla inicial de cada palabra. En la numeración por fila y
+   * columna (revista española) el número vive al margen y NO va en la grilla:
+   * copiarlo ahí llenaría el tablero de números repetidos que además significan
+   * otra cosa ("fila 5", no "palabra 5").
+   *
+   * La señal que las distingue: con numeración por palabra, cada número aparece
+   * una sola vez por dirección.
+   */
+  for (const direction of [ACROSS, DOWN]) {
+    const list = clues[direction];
+    const perWord = new Set(list.map((c) => c.number)).size === list.length;
+    if (!perWord) continue;
+    for (const clue of list) {
+      if (normalizedGrid[clue.row][clue.col].number == null) {
+        normalizedGrid[clue.row][clue.col].number = clue.number;
+      }
+    }
   }
 
   return { rows, cols, grid: normalizedGrid, clues, warnings };

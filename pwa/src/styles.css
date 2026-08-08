@@ -130,8 +130,9 @@ code {
 
 .grid {
   --cols: 15;
-  /* Ancho aproximado de una casilla, para escalar la tipografía. */
-  --cell-size: calc(min(100vw - 1.8rem, 34rem) / var(--cols));
+  /* Ancho real de una casilla, publicado por CrosswordGrid con un
+     ResizeObserver. El valor de aquí solo cubre el primer pintado. */
+  --cell-size: 22px;
 
   display: grid;
   gap: 2px;
