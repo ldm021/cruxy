@@ -104,6 +104,43 @@ export function buildCellIndex(crossword) {
   return index;
 }
 
+/**
+ * `true` si el crucigrama numera filas y columnas (revista española) en vez de
+ * numerar cada palabra (periódico).
+ *
+ * La señal es la repetición: con numeración por palabra cada número aparece una
+ * sola vez por dirección; con numeración por fila y columna, la "5 horizontal"
+ * agrupa todas las palabras de la fila 5.
+ */
+export function usesRowColumnNumbering(crossword) {
+  if (!crossword?.clues) return false;
+  for (const direction of [ACROSS, DOWN]) {
+    const list = crossword.clues[direction] || [];
+    if (list.length > new Set(list.map((c) => c.number)).size) return true;
+  }
+  return false;
+}
+
+/**
+ * Números para las reglas de los bordes: el que corresponde a cada fila y a
+ * cada columna. Se toman de las pistas en vez de asumir 1, 2, 3…, por si la
+ * revista empieza a numerar en otro lado.
+ *
+ * @returns {{rows: (number|null)[], cols: (number|null)[]}}
+ */
+export function rulerLabels(crossword) {
+  const rows = Array.from({ length: crossword?.rows ?? 0 }, () => null);
+  const cols = Array.from({ length: crossword?.cols ?? 0 }, () => null);
+
+  for (const clue of crossword?.clues?.[ACROSS] || []) {
+    if (rows[clue.row] == null) rows[clue.row] = clue.number;
+  }
+  for (const clue of crossword?.clues?.[DOWN] || []) {
+    if (cols[clue.col] == null) cols[clue.col] = clue.number;
+  }
+  return { rows, cols };
+}
+
 /** `true` si todas las casillas de la entrada tienen letra. */
 export function isEntryComplete(entry, values) {
   if (!entry?.cells?.length) return false;

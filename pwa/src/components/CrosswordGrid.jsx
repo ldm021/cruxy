@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { GridCell } from './GridCell';
 import {
   ACROSS,
@@ -7,6 +7,8 @@ import {
   isOpenCell,
   nextOpenCell,
   normalizeLetter,
+  rulerLabels,
+  usesRowColumnNumbering,
 } from '../lib/crossword';
 
 /**
@@ -208,44 +210,98 @@ export function CrosswordGrid({
     }
   }, [crossword, cursor, onCursorChange]);
 
+  /*
+   * Reglas numeradas en los bordes, como en la revista: la columna de la
+   * izquierda dice qué fila es cada una y la fila de arriba, qué columna. Solo
+   * tienen sentido con numeración por fila/columna; en los crucigramas de
+   * periódico el número va dentro de la casilla inicial de cada palabra.
+   */
+  const showRulers = useMemo(() => usesRowColumnNumbering(crossword), [crossword]);
+  const rulers = useMemo(
+    () => (showRulers ? rulerLabels(crossword) : null),
+    [showRulers, crossword],
+  );
+
   if (!crossword) return null;
+
+  const gridEl = (
+    <div
+      ref={gridRef}
+      className="grid"
+      style={{
+        gridTemplateColumns: `repeat(${crossword.cols}, 1fr)`,
+        // El CSS usa --cols para escalar la letra al ancho de casilla: un
+        // crucigrama de revista de 18 columnas necesita tipografía mucho más
+        // chica que uno de 5.
+        '--cols': crossword.cols,
+      }}
+      role="grid"
+      aria-label={crossword.title || 'Crucigrama'}
+    >
+      {crossword.grid.map((rowCells, row) =>
+        rowCells.map((cell, col) => {
+          const key = cellId(row, col);
+          const entry = values[key];
+          return (
+            <GridCell
+              key={key}
+              row={row}
+              col={col}
+              cell={cell}
+              value={entry?.value || ''}
+              filledBy={entry?.filledBy || ''}
+              isMine={entry?.filledBy === myName}
+              isSelected={cursor?.row === row && cursor?.col === col}
+              isInEntry={inEntry(row, col)}
+              onSelect={selectCell}
+            />
+          );
+        }),
+      )}
+    </div>
+  );
 
   return (
     <div className="grid-wrapper">
-      <div
-        ref={gridRef}
-        className="grid"
-        style={{
-          gridTemplateColumns: `repeat(${crossword.cols}, 1fr)`,
-          // El CSS usa --cols para escalar la letra al ancho de casilla: un
-          // crucigrama de revista de 18 columnas necesita tipografía mucho más
-          // chica que uno de 5.
-          '--cols': crossword.cols,
-        }}
-        role="grid"
-        aria-label={crossword.title || 'Crucigrama'}
-      >
-        {crossword.grid.map((rowCells, row) =>
-          rowCells.map((cell, col) => {
-            const key = cellId(row, col);
-            const entry = values[key];
-            return (
-              <GridCell
-                key={key}
-                row={row}
-                col={col}
-                cell={cell}
-                value={entry?.value || ''}
-                filledBy={entry?.filledBy || ''}
-                isMine={entry?.filledBy === myName}
-                isSelected={cursor?.row === row && cursor?.col === col}
-                isInEntry={inEntry(row, col)}
-                onSelect={selectCell}
-              />
-            );
-          }),
-        )}
-      </div>
+      {rulers ? (
+        <div className="grid-frame">
+          <div className="ruler__corner" aria-hidden="true" />
+
+          <div
+            className="ruler ruler--top"
+            style={{ gridTemplateColumns: `repeat(${crossword.cols}, 1fr)` }}
+            aria-hidden="true"
+          >
+            {rulers.cols.map((label, col) => (
+              <span
+                key={col}
+                className={`ruler__mark ${cursor?.col === col ? 'is-current' : ''}`}
+              >
+                {label ?? ''}
+              </span>
+            ))}
+          </div>
+
+          <div
+            className="ruler ruler--left"
+            style={{ gridTemplateRows: `repeat(${crossword.rows}, 1fr)` }}
+            aria-hidden="true"
+          >
+            {rulers.rows.map((label, row) => (
+              <span
+                key={row}
+                className={`ruler__mark ${cursor?.row === row ? 'is-current' : ''}`}
+              >
+                {label ?? ''}
+              </span>
+            ))}
+          </div>
+
+          {gridEl}
+        </div>
+      ) : (
+        gridEl
+      )}
 
       {/* Captura de teclado: invisible pero enfocable. Nada de display:none,
           que impediría el foco y, por lo tanto, el teclado virtual. */}
